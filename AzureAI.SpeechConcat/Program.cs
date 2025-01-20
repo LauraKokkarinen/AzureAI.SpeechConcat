@@ -27,7 +27,7 @@ class Program
             await ConcatBatchSynthesizer.Run(speechKey, speechRegion, batches, directoryPath) :
             await ConcatSpeechSynthesizer.Run(speechKey, speechRegion, batches, directoryPath);
 
-        ConcatAudioFiles(audioFilePaths, $"{directoryPath}\\{audioFileName ?? "result"}.wav");
+        ConcatAudioFiles(audioFilePaths, directoryPath, $"{audioFileName ?? "result"}.wav");
     }    
 
     private static List<string> PrepareBatches(string textFilePath, int batchLength, string? voiceName, string? temperature)
@@ -51,7 +51,7 @@ class Program
         return batches;
     }    
 
-    private static void ConcatAudioFiles(IEnumerable<string> inputFilePaths, string outputFilePath)
+    private static void ConcatAudioFiles(IEnumerable<string> inputFilePaths, string directoryPath, string outputFileName)
     {
         var audioFiles = new List<AudioFileReader>();
 
@@ -62,7 +62,7 @@ class Program
 
         var concatResult = new ConcatenatingSampleProvider(audioFiles);
 
-        WaveFileWriter.CreateWaveFile16(outputFilePath, concatResult);
+        WaveFileWriter.CreateWaveFile16($"{directoryPath}\\{outputFileName}", concatResult);
 
         foreach (var audioFile in audioFiles)
         {
@@ -70,7 +70,7 @@ class Program
             audioFile.Dispose();
 
             var directory = Path.GetDirectoryName(audioFile.FileName);
-            if (directory != null)
+            if (directory != null && directory != directoryPath)
             {
                 var files = Directory.GetFiles(directory);
                 foreach (var file in files)
@@ -78,6 +78,8 @@ class Program
 
                 Directory.Delete(directory);
             }
+            else
+                File.Delete(audioFile.FileName);
         }
     }
 }
