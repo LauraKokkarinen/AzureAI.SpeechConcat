@@ -1,6 +1,6 @@
 # AzureAI.SpeechConcat
 
-The purpose of this C# .NET 8 console application is to convert long text files into speech using the Azure AI Speech service. The solution has been implemented specifically to create audiobook-like audio files based on fiction writing.
+The purpose of this C# .NET 8 console application is to convert long plain-text files into speech using the Azure AI Speech service. The solution has been implemented specifically to create audiobook-like audio files based on fiction writing.
 
 The application will first add limited SSML markup to the provided plain-text file content. The following SSML markup will be introduced:
 
