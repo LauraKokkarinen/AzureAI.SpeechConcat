@@ -12,23 +12,25 @@ class Program
         string? speechKey = configuration["SpeechKey"];
         string? speechRegion = configuration["SpeechRegion"];
         string? textFilePath = configuration["TextFilePath"];
+        string? voiceName = configuration["VoiceName"];
+        string? temperature = configuration["Temperature"];        
         string? audioFileName = configuration["AudioFileName"];
         _ = bool.TryParse(configuration["UseBatchSynth"], out bool useBatchSynth);
 
-        if (string.IsNullOrEmpty(speechKey) || string.IsNullOrEmpty(speechRegion) || string.IsNullOrEmpty(textFilePath) || string.IsNullOrEmpty(audioFileName))
+        if (string.IsNullOrEmpty(speechKey) || string.IsNullOrEmpty(speechRegion) || string.IsNullOrEmpty(textFilePath))
             throw new Exception("Missing required configuration values.");
 
         var directoryPath = Path.GetDirectoryName(textFilePath) ?? throw new Exception("Text file path is invalid.");
-        var batches = PrepareBatches(textFilePath, 5000);
+        var batches = PrepareBatches(textFilePath, 5000, voiceName, temperature);
 
         var audioFilePaths = useBatchSynth ?
             await ConcatBatchSynthesizer.Run(speechKey, speechRegion, batches, directoryPath) :
             await ConcatSpeechSynthesizer.Run(speechKey, speechRegion, batches, directoryPath);
 
-        ConcatAudioFiles(audioFilePaths, $"{directoryPath}\\{audioFileName}.wav");
+        ConcatAudioFiles(audioFilePaths, $"{directoryPath}\\{audioFileName ?? "result"}.wav");
     }    
 
-    private static List<string> PrepareBatches(string textFilePath, int batchLength)
+    private static List<string> PrepareBatches(string textFilePath, int batchLength, string? voiceName, string? temperature)
     {
         var batches = new List<string>();
 
@@ -41,7 +43,7 @@ class Program
             var endIndex = startIndex + batchLength < ssmlContent.Length ? ssmlContent.LastIndexOf("/>", startIndex + batchLength) + 2 : ssmlContent.Length;
             var batch = ssmlContent.Substring(startIndex, endIndex - startIndex);
 
-            batches.Add($"<speak version=\"1.0\" xmlns=\"http://www.w3.org/2001/10/synthesis\" xml:lang=\"en-US\"><voice name=\"en-US-Ava:DragonHDLatestNeural\" parameters=\"temperature=0.5\">{batch}</voice></speak>");
+            batches.Add($"<speak version=\"1.0\" xmlns=\"http://www.w3.org/2001/10/synthesis\" xml:lang=\"en-US\"><voice name=\"{voiceName ?? "en-US-Ava:DragonHDLatestNeural"}\" parameters=\"temperature={temperature ?? "1.0"}\">{batch}</voice></speak>");
 
             startIndex = endIndex;
         }
