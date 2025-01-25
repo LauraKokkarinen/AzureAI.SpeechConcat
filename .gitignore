@@ -6,3 +6,5 @@
 /AzureAI.SpeechConcat/bin/Debug/net8.0
 /AzureAI.SpeechConcat/obj
 /AzureAI.SpeechConcat/appsettings.json
+*.wav
+*.txt
