@@ -43,7 +43,7 @@ class Program
             var endIndex = startIndex + batchLength < ssmlContent.Length ? ssmlContent.LastIndexOf("/>", startIndex + batchLength) + 2 : ssmlContent.Length;
             var batch = ssmlContent.Substring(startIndex, endIndex - startIndex);
 
-            batches.Add($"<speak version=\"1.0\" xmlns=\"http://www.w3.org/2001/10/synthesis\" xml:lang=\"en-US\"><voice name=\"{voiceName ?? "en-US-Ava:DragonHDLatestNeural"}\" parameters=\"temperature={temperature ?? "1.0"}\">{batch}</voice></speak>");
+            batches.Add($"<speak version=\"1.0\" xmlns=\"http://www.w3.org/2001/10/synthesis\" xml:lang=\"en-US\"><voice name=\"{voiceName ?? "en-US-Ava:DragonHDLatestNeural"}\" parameters=\"temperature={temperature ?? "1.0"}\"><prosody rate=\"default\">{batch}</prosody></voice></speak>");
 
             startIndex = endIndex;
         }
