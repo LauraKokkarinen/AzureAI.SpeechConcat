@@ -16,12 +16,13 @@ class Program
         string? temperature = configuration["Temperature"];        
         string? audioFileName = configuration["AudioFileName"];
         _ = bool.TryParse(configuration["UseBatchSynth"], out bool useBatchSynth);
+        _ = bool.TryParse(configuration["SaveSsml"], out bool saveSsml);
 
         if (string.IsNullOrEmpty(speechKey) || string.IsNullOrEmpty(speechRegion) || string.IsNullOrEmpty(textFilePath))
             throw new Exception("Missing required configuration values.");
 
         var directoryPath = Path.GetDirectoryName(textFilePath) ?? throw new Exception("Text file path is invalid.");
-        var batches = PrepareBatches(textFilePath, 5000, voiceName, temperature);
+        var batches = PrepareBatches(textFilePath, 5000, voiceName, temperature, saveSsml);
 
         var audioFilePaths = useBatchSynth ?
             await ConcatBatchSynthesizer.Run(speechKey, speechRegion, batches, directoryPath) :
@@ -30,7 +31,7 @@ class Program
         ConcatAudioFiles(audioFilePaths, directoryPath, $"{audioFileName ?? "result"}.wav");
     }    
 
-    private static List<string> PrepareBatches(string textFilePath, int batchLength, string? voiceName, string? temperature)
+    private static List<string> PrepareBatches(string textFilePath, int batchLength, string? voiceName, string? temperature, bool? saveSsml)
     {
         var batches = new List<string>();
 
@@ -41,11 +42,15 @@ class Program
         while (startIndex < ssmlContent.Length)
         {
             var endIndex = startIndex + batchLength < ssmlContent.Length ? ssmlContent.LastIndexOf("/>", startIndex + batchLength) + 2 : ssmlContent.Length;
-            var batch = ssmlContent.Substring(startIndex, endIndex - startIndex);
+            var content = ssmlContent.Substring(startIndex, endIndex - startIndex);
 
-            batches.Add($"<speak version=\"1.0\" xmlns=\"http://www.w3.org/2001/10/synthesis\" xml:lang=\"en-US\"><voice name=\"{voiceName ?? "en-US-Ava:DragonHDLatestNeural"}\" parameters=\"temperature={temperature ?? "1.0"}\"><prosody rate=\"default\">{batch}</prosody></voice></speak>");
+            var batch = $"<speak version=\"1.0\" xmlns=\"http://www.w3.org/2001/10/synthesis\" xml:lang=\"en-US\"><voice name=\"{voiceName ?? "en-US-Ava:DragonHDLatestNeural"}\" parameters=\"temperature={temperature ?? "1.0"}\"><prosody rate=\"default\">{content}</prosody></voice></speak>";
+            batches.Add(batch);
 
             startIndex = endIndex;
+
+            if (saveSsml == true)
+                File.WriteAllText($"{Path.GetDirectoryName(textFilePath)}\\{startIndex}.ssml", string.Join("", batch));
         }
 
         return batches;
