@@ -71,7 +71,7 @@ Below is an example transformation of text into SSML based on the guidelines:
 <speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="https://www.w3.org/2001/mstts"  version="1.0" xml:lang="en-US">
   <voice name="zh-CN-XiaoxiaoMultilingualNeural" parameters="temperature=1.0">
     <mstts:express-as style="story" styledegree="2">
-      The night was dark and full of dread.
+      The night was dark and full of terrors.
     </mstts:express-as>
   </voice>
   <voice name="en-US-JasonNeural" parameters="temperature=1.0">
