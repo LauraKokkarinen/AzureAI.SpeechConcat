@@ -64,7 +64,7 @@ All text must be converted into SSML markup. The final format should include:
 Below is an example transformation of text into SSML based on the guidelines:
 
 ### Input Text:
-*"The night was dark and full of dread. 'Run!' shouted Nemo. 'We have to get away!' Pepper added, her voice trembling."*
+*"The night was dark and full of terrors. 'Run!' shouted Nemo. 'We have to get away!' Pepper added, her voice trembling."*
 
 ### Output SSML:
 ```xml
