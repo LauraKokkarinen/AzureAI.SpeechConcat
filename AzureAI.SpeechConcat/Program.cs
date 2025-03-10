@@ -15,8 +15,10 @@ class Program
         string? voiceName = configuration["VoiceName"];
         string? language = configuration["Language"];
         string? temperature = configuration["Temperature"];
+        string? speedIncrease = configuration["SpeedIncrease"];
         string? voiceStyle = configuration["VoiceStyle"];
         string? styleDegree = configuration["StyleDegree"];
+        string? breakDuration = configuration["BreakDuration"];
         string? audioFileName = configuration["AudioFileName"];
         _ = bool.TryParse(configuration["UseBatchSynth"], out bool useBatchSynth);
         _ = bool.TryParse(configuration["SaveSsml"], out bool saveSsml);
@@ -25,7 +27,7 @@ class Program
             throw new Exception("Missing required configuration values.");
 
         var directoryPath = Path.GetDirectoryName(textFilePath) ?? throw new Exception("Text file path is invalid.");
-        var batches = PrepareBatches(textFilePath, 5000, voiceName, language, temperature, voiceStyle, styleDegree, saveSsml);
+        var batches = PrepareBatches(textFilePath, 5000, voiceName, language, temperature, speedIncrease, voiceStyle, styleDegree, breakDuration, saveSsml);
 
         var audioFilePaths = useBatchSynth ?
             await ConcatBatchSynthesizer.Run(speechKey, speechRegion, batches, directoryPath) :
@@ -34,20 +36,21 @@ class Program
         ConcatAudioFiles(audioFilePaths, directoryPath, $"{audioFileName ?? "result"}.wav");
     }    
 
-    private static List<string> PrepareBatches(string textFilePath, int batchLength, string? voiceName, string? language, string? temperature, string? voiceStyle, string? styleDegree, bool? saveSsml)
+    private static List<string> PrepareBatches(string textFilePath, int batchLength, string? voiceName, string? language, string? temperature, string? speedIncrease, string? voiceStyle, string? styleDegree, string? breakDuration, bool? saveSsml)
     {
         var batches = new List<string>();
 
         var textContent = File.ReadAllText(textFilePath);
-        var ssmlContent = $"<p>{textContent.Replace("\r\n", "</p><break strength=\"strong\"/><p>").Replace("***", "<break strength=\"x-strong\"/>")}</p><break strength=\"strong\"/>";
+        var breakTag = $"<break time=\"{breakDuration}ms\"/>";
+        var ssmlContent = $"<p>{textContent.Replace("\r\n", $"</p>{breakTag}<p>").Replace("***", $"{breakTag}{breakTag}")}</p>{breakTag}";
 
         var startIndex = 0;
         while (startIndex < ssmlContent.Length)
         {
-            var endIndex = startIndex + batchLength < ssmlContent.Length ? ssmlContent.LastIndexOf("/>", startIndex + batchLength) + 2 : ssmlContent.Length;
+            var endIndex = startIndex + batchLength < ssmlContent.Length ? ssmlContent.LastIndexOf(breakTag, startIndex + batchLength) + breakTag.Length : ssmlContent.Length;
             var content = ssmlContent.Substring(startIndex, endIndex - startIndex);
 
-            var batch = $"<speak version=\"1.0\" xmlns=\"http://www.w3.org/2001/10/synthesis\" xmlns:mstts=\"https://www.w3.org/2001/mstts\" xml:lang=\"{language}\"><voice name=\"{voiceName ?? "en-US-Ava:DragonHDLatestNeural"}\" parameters=\"temperature={temperature ?? "1.0"}\"><mstts:express-as style=\"{voiceStyle}\" styledegree=\"{styleDegree}\">{content}</mstts:express-as></voice></speak>";
+            var batch = $"<speak version=\"1.0\" xmlns=\"http://www.w3.org/2001/10/synthesis\" xmlns:mstts=\"https://www.w3.org/2001/mstts\" xml:lang=\"{language}\"><voice name=\"{voiceName ?? "en-US-Ava:DragonHDLatestNeural"}\" parameters=\"temperature={temperature ?? "1.0"}\"><prosody rate=\"{speedIncrease}%\" pitch=\"0%\"><mstts:express-as style=\"{voiceStyle}\" styledegree=\"{styleDegree}\">{content}</mstts:express-as></prosody></voice></speak>";
             batches.Add(batch);
 
             startIndex = endIndex;
