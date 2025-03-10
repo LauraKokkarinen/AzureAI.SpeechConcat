@@ -15,15 +15,15 @@ Convert the provided fantasy novel text into SSML markup according to the specif
      - Pepper: `en-US-SaraNeural` (Add a prosody pitch of 30% for her dialogue)
      - Nimble: `en-US-TonyNeural`
      - Lyria: `en-US-NancyNeural`
-     - Seltern: `en-US-GuyNeural`
-     - Ravengard: `en-US-DavisNeural`
+     - Seltern Obranch: `en-US-GuyNeural`
+     - Grand Duke Ulder Ravengard: `en-US-DavisNeural`
      - Zevlor: `en-US-AndrewMultilingualNeural`
-     - Pherria: `en-US-Emma:DragonHDLatestNeural`
+     - Pherria Jynks: `en-US-Emma:DragonHDLatestNeural`
    - For any characters not listed above, default to the base storytelling voice.
 
 3. **Dialogue Customization**:
-   - Use the `mstts:express-as` element inside individual `<voice>` tags to dynamically adjust speaking style based on context and emotion for **each character** using the listed speaking styles below. Do not use any other speaking styles.
-     - Supported Speaking Styles for Characters:
+   - Use the `mstts:express-as` element inside individual `<voice>` tags to dynamically set one of the supported speaking styles below based on the context and emotion.
+     - Only use these supported speaking styles for different voices:
        - en-US-JaneNeural, en-US-JasonNeural, en-US-SaraNeural, en-US-TonyNeural, en-US-NancyNeural, en-US-GuyNeural, en-US-DavisNeural: `default`, `angry`, `cheerful`, `excited`, `friendly`, `hopeful`, `sad`, `shouting`, `terrified`, `unfriendly`, `whispering`
        - en-US-AndrewMultilingualNeural: `default`, `empathetic`, `relieved`
        - en-US-Emma:DragonHDLatestNeural: `default`
