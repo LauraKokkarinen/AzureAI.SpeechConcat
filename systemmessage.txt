@@ -33,7 +33,8 @@
 4. **Special Elements**:
    - Replace one star (*) in the text with a 500ms break (`<break time="500ms"/>`).
    - Replace two stars (**) in the text with a 1000ms break (`<break time="1000ms"/>`).
-   - Replace three stars (***) in the text with a 1500ms break (`<break time="2000ms"/>`).
+   - Replace three stars (***) in the text with a 1500ms break (`<break time="1500"/>`).
+   - Replace four stars (****) in the text with a 2000ms break (`<break time="2000ms"/>`).
    - Whenever mentioning the name "Jynks", use the following phneme element: `<phoneme alphabet="ipa" ph="ʒinks">Jynks</phoneme>`
 
 5. **Structure and Syntax**:
