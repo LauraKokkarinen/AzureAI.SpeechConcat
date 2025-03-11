@@ -77,61 +77,61 @@ Below is an example transformation of text into SSML based on the guidelines:
 <speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="https://www.w3.org/2001/mstts" xml:lang="en-UK" version="1.0">
 	<voice name="zh-CN-XiaoxiaoMultilingualNeural" parameters="temperature=1.0">
 		<mstts:express-as style="story" styledegree="2">  
-      A heavy silence descended over the battleground. The Hellriders had already rounded up and dispatched the last of the cultists. Amid the smoldering ruins, the companions paused to catch their breath, each scar and bruise a grim reminder of the infernal ordeal.  
-    </mstts:express-as>
+			A heavy silence descended over the battleground. The Hellriders had already rounded up and dispatched the last of the cultists. Amid the smoldering ruins, the companions paused to catch their breath, each scar and bruise a grim reminder of the infernal ordeal.  
+		</mstts:express-as>
 	</voice>
 	<voice name="zh-CN-XiaoxiaoMultilingualNeural" parameters="temperature=1.0">
 		<mstts:express-as style="story" styledegree="2">  
-      Then, Reya practically ran forward, throwing her arms around a handsome tiefling man clad in battered armor, his magnificent black horns glinting in the dim light.  
-    </mstts:express-as>
+			Then, Reya practically ran forward, throwing her arms around a handsome tiefling man clad in battered armor, his magnificent black horns glinting in the dim light.  
+		</mstts:express-as>
 	</voice>
 	<voice name="en-US-JaneNeural" parameters="temperature=1.0">
 		<mstts:express-as style="cheerful" styledegree="2">  
-      "Zevlor!" 
-    </mstts:express-as>
+			"Zevlor!" 
+		</mstts:express-as>
 	</voice>
 	<voice name="zh-CN-XiaoxiaoMultilingualNeural" parameters="temperature=1.0">
 		<mstts:express-as style="story" styledegree="2">  
-       she exclaimed warmly, clinging to him as if afraid to let go. Standing nearby, a distinguished priestess with silvered gray hair and a formidable mace in one hand nodded gravely.  
-    </mstts:express-as>
+			she exclaimed warmly, clinging to him as if afraid to let go. Standing nearby, a distinguished priestess with silvered gray hair and a formidable mace in one hand nodded gravely.  
+		</mstts:express-as>
 	</voice>
 	<voice name="en-US-Emma:DragonHDLatestNeural" parameters="temperature=1.0">
 		<mstts:express-as style="default" styledegree="2">  
-      "I am Pherria Jynks, an acolyte o' Torm, an' I thank ye kindly,"
-    </mstts:express-as>
+			"I am Pherria <phoneme alphabet="ipa" ph="ʒinks">Jynks</phoneme>, an acolyte o' Torm, an' I thank ye kindly,"
+		</mstts:express-as>
 	</voice>
 	<voice name="zh-CN-XiaoxiaoMultilingualNeural" parameters="temperature=1.0">
 		<mstts:express-as style="story" styledegree="2">  
-        she declared.   
-    </mstts:express-as>
+			she declared.   
+		</mstts:express-as>
 	</voice>
 	<voice name="en-US-Emma:DragonHDLatestNeural" parameters="temperature=1.0">
 		<mstts:express-as style="default" styledegree="2">  
-      "Ye arrived at the very last moment—our defenses were crumblin', and there was nae place left to retreat." 
-    </mstts:express-as>
+			"Ye arrived at the very last moment—our defenses were crumblin', and there was nae place left to retreat." 
+		</mstts:express-as>
 	</voice>
 	<voice name="zh-CN-XiaoxiaoMultilingualNeural" parameters="temperature=1.0">
 		<mstts:express-as style="story" styledegree="2">
-			<break time="500ms"/>As Zevlor closed on Nimble and patted his shoulder, the tiefling's voice took on a rueful tone.  
-    </mstts:express-as>
+			As Zevlor closed on Nimble and patted his shoulder, the tiefling's voice took on a rueful tone.  
+		</mstts:express-as>
 	</voice>
 	<voice name="en-US-AndrewMultilingualNeural" parameters="temperature=1.0">
 		<prosody pitch="-5%">
 			<mstts:express-as style="relieved" styledegree="2">  
-        "I'm so glad that some Hellriders still live," 
-      </mstts:express-as>
+				"I'm so glad that some Hellriders still live," 
+			</mstts:express-as>
 		</prosody>
 	</voice>
 	<voice name="zh-CN-XiaoxiaoMultilingualNeural" parameters="temperature=1.0">
 		<mstts:express-as style="story" styledegree="2">  
-      he said, his skin appearing deep red in the infernal light and his yellow eyes burning with a quiet intensity.   
-    </mstts:express-as>
+			he said, his skin appearing deep red in the infernal light and his yellow eyes burning with a quiet intensity.   
+		</mstts:express-as>
 	</voice>
 	<voice name="en-US-AndrewMultilingualNeural" parameters="temperature=1.0">
 		<prosody pitch="-5%">
 			<mstts:express-as style="default" styledegree="2">  
-		"Where have you all been? We've been trapped here for weeks, barely surviving. We've scoured the ruins for survivors and supplies, all the while clinging to the  safety of this place—until that meteorite fell, and the devils launched their concentrated assault."
-	  </mstts:express-as>
+				"Where have you all been? We've been trapped here for weeks, barely surviving. We've scoured the ruins for survivors and supplies, all the while clinging to the  safety of this place—until that meteorite fell, and the devils launched their concentrated assault."
+			</mstts:express-as>
 		</prosody>
 	</voice>
 </speak>
