@@ -1,10 +1,10 @@
-Convert the provided fantasy novel text into SSML markup according to the specifications below.
+ï»¿Convert the provided fantasy novel text into SSML markup according to the specifications below.
 
 # Guidelines
 
 1. **Base Storytelling Voice**:
    - Use the voice `zh-CN-XiaoxiaoMultilingualNeural` with the following properties:
-     - Language: `en-UK`
+     - Language: `en-US`
      - Speaking Style: `story`
      - Style Degree: `2`
 
@@ -31,7 +31,10 @@ Convert the provided fantasy novel text into SSML markup according to the specif
    - Analyze the text to identify dialogue emotion and assign one of the voice styles that are listed above for the used voice. Do not assign any other style that is not explicitly listed above.
 
 4. **Special Elements**:
-   - Replace three stars (***) in the text with a 500ms break (`<break time="500ms"/>`).
+   - Replace one star (*) in the text with a 500ms break (`<break time="500ms"/>`).
+   - Replace two stars (**) in the text with a 1000ms break (`<break time="1000ms"/>`).
+   - Replace three stars (***) in the text with a 1500ms break (`<break time="2000ms"/>`).
+   - Whenever mentioning the name "Jynks", use the following phneme element: `<phoneme alphabet="ipa" ph="Ê’inks">Jynks</phoneme>`
 
 5. **Structure and Syntax**:
    - Begin the output with `<speak>` element including properties:
@@ -59,7 +62,7 @@ All text must be converted into SSML markup. The final format should include:
 # Notes
 
 - Handle emotional analysis of dialogue carefully to assign the correct speaking styles.
-- Changes should only involve SSML markup—do not modify, add, or remove any story content.
+- Changes should only involve SSML markupâ€”do not modify, add, or remove any story content.
 - If any portion of the text is unclear or ambiguous, maintain the base narration style.
 
 # Example
@@ -104,7 +107,7 @@ Below is an example transformation of text into SSML based on the guidelines:
 	</voice>
 	<voice name="en-US-Emma:DragonHDLatestNeural" parameters="temperature=1.0">
 		<mstts:express-as style="default" styledegree="2">  
-      "Ye arrived at the very last moment—our defenses were crumblin', and there was nae place left to retreat." 
+      "Ye arrived at the very last momentâ€”our defenses were crumblin', and there was nae place left to retreat." 
     </mstts:express-as>
 	</voice>
 	<voice name="zh-CN-XiaoxiaoMultilingualNeural" parameters="temperature=1.0">
@@ -127,7 +130,7 @@ Below is an example transformation of text into SSML based on the guidelines:
 	<voice name="en-US-AndrewMultilingualNeural" parameters="temperature=1.0">
 		<prosody pitch="-5%">
 			<mstts:express-as style="default" styledegree="2">  
-		"Where have you all been? We've been trapped here for weeks, barely surviving. We've scoured the ruins for survivors and supplies, all the while clinging to the  safety of this place—until that meteorite fell, and the devils launched their concentrated assault."
+		"Where have you all been? We've been trapped here for weeks, barely surviving. We've scoured the ruins for survivors and supplies, all the while clinging to the  safety of this placeâ€”until that meteorite fell, and the devils launched their concentrated assault."
 	  </mstts:express-as>
 		</prosody>
 	</voice>
