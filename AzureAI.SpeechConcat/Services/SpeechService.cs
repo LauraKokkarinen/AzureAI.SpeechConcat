@@ -5,11 +5,11 @@ using System.Text.Json;
 
 namespace AzureAI.Speech.Services
 {
-    public class SpeechService(HttpService httpService, string speechRegion, string speechKey)
+    public class SpeechService(HttpService httpService, string region, string key)
     {
         private readonly HttpService _httpService = httpService;
-        private readonly string? _speechRegion = speechRegion;
-        private readonly string? _speechKey = speechKey;
+        private readonly string _region = region;
+        private readonly string _key = key;
 
         /// <summary>
         /// Get the headers for a request.
@@ -19,7 +19,7 @@ namespace AzureAI.Speech.Services
         {
             var headers = new HttpRequestMessage().Headers;
 
-            headers.TryAddWithoutValidation("Ocp-Apim-Subscription-Key", _speechKey);
+            headers.TryAddWithoutValidation("Ocp-Apim-Subscription-Key", _key);
 
             return headers;
         }
@@ -115,7 +115,7 @@ namespace AzureAI.Speech.Services
                 }
             };
 
-            return await Put<BatchSynthesis>($"https://{_speechRegion}.api.cognitive.microsoft.com/texttospeech/batchsyntheses/{uniqueId}?api-version=2024-04-01", JsonSerializer.Serialize(body));
+            return await Put<BatchSynthesis>($"https://{_region}.api.cognitive.microsoft.com/texttospeech/batchsyntheses/{uniqueId}?api-version=2024-04-01", JsonSerializer.Serialize(body));
         }
 
         /// <summary>
@@ -125,7 +125,7 @@ namespace AzureAI.Speech.Services
         /// <returns>The batch synthesis details.</returns>
         public async Task<BatchSynthesis?> GetBatchSynthesis(string id)
         {
-            return await Get<BatchSynthesis>($"https://{_speechRegion}.api.cognitive.microsoft.com/texttospeech/batchsyntheses/{id}?api-version=2024-04-01");
+            return await Get<BatchSynthesis>($"https://{_region}.api.cognitive.microsoft.com/texttospeech/batchsyntheses/{id}?api-version=2024-04-01");
         }
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace AzureAI.Speech.Services
         /// <returns>The batch syntheses' details.</returns>
         public async Task<IEnumerable<BatchSynthesis>?> GetBatchSyntheses()
         {
-            return await GetCollection<BatchSynthesis>($"https://{_speechRegion}.api.cognitive.microsoft.com/texttospeech/batchsyntheses?api-version=2024-04-01");
+            return await GetCollection<BatchSynthesis>($"https://{_region}.api.cognitive.microsoft.com/texttospeech/batchsyntheses?api-version=2024-04-01");
         }
 
         /// <summary>
@@ -144,7 +144,7 @@ namespace AzureAI.Speech.Services
         /// <returns></returns>
         public async Task DeleteBatchSynthesis(string id)
         {
-            await Delete($"https://{_speechRegion}.api.cognitive.microsoft.com/texttospeech/batchsyntheses/{id}?api-version=2024-04-01");
+            await Delete($"https://{_region}.api.cognitive.microsoft.com/texttospeech/batchsyntheses/{id}?api-version=2024-04-01");
         }
     }
 }
