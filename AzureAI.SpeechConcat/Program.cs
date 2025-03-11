@@ -18,8 +18,8 @@ class Program
         string? speedIncrease = configuration["SpeedIncrease"];
         string? voiceStyle = configuration["VoiceStyle"];
         string? styleDegree = configuration["StyleDegree"];
-        string? breakDuration = configuration["BreakDuration"];
         string? audioFileName = configuration["AudioFileName"];
+        _ = int.TryParse(configuration["BreakDuration"], out int breakDuration);
         _ = bool.TryParse(configuration["UseBatchSynth"], out bool useBatchSynth);
         _ = bool.TryParse(configuration["SaveSsml"], out bool saveSsml);
 
@@ -36,13 +36,13 @@ class Program
         ConcatAudioFiles(audioFilePaths, directoryPath, $"{audioFileName ?? "result"}.wav");
     }    
 
-    private static List<string> PrepareBatches(string textFilePath, int batchLength, string? voiceName, string? language, string? temperature, string? speedIncrease, string? voiceStyle, string? styleDegree, string? breakDuration, bool? saveSsml)
+    private static List<string> PrepareBatches(string textFilePath, int batchLength, string? voiceName, string? language, string? temperature, string? speedIncrease, string? voiceStyle, string? styleDegree, int? breakDuration, bool? saveSsml)
     {
         var batches = new List<string>();
 
         var textContent = File.ReadAllText(textFilePath);
-        var breakTag = $"<break time=\"{breakDuration}ms\"/>";
-        var ssmlContent = $"<p>{textContent.Replace("\r\n", $"</p>{breakTag}<p>").Replace("***", $"{breakTag}{breakTag}")}</p>{breakTag}";
+        var breakTag = $"<break time=\"{breakDuration ?? 500}ms\"/>";
+        var ssmlContent = $"<p>{textContent.Replace("\r\n", "</p><p>").Replace("<p></p>", "").Replace("<p/>", "").Replace("</p><p>", $"</p>{breakTag}<p>").Replace("***", $"{breakTag}{breakTag}")}</p>{breakTag}";
 
         var startIndex = 0;
         while (startIndex < ssmlContent.Length)
@@ -50,7 +50,7 @@ class Program
             var endIndex = startIndex + batchLength < ssmlContent.Length ? ssmlContent.LastIndexOf(breakTag, startIndex + batchLength) + breakTag.Length : ssmlContent.Length;
             var content = ssmlContent.Substring(startIndex, endIndex - startIndex);
 
-            var batch = $"<speak version=\"1.0\" xmlns=\"http://www.w3.org/2001/10/synthesis\" xmlns:mstts=\"https://www.w3.org/2001/mstts\" xml:lang=\"{language}\"><voice name=\"{voiceName ?? "en-US-Ava:DragonHDLatestNeural"}\" parameters=\"temperature={temperature ?? "1.0"}\"><prosody rate=\"{speedIncrease}%\" pitch=\"0%\"><mstts:express-as style=\"{voiceStyle}\" styledegree=\"{styleDegree}\">{content}</mstts:express-as></prosody></voice></speak>";
+            var batch = $"<speak version=\"1.0\" xmlns=\"http://www.w3.org/2001/10/synthesis\" xmlns:mstts=\"https://www.w3.org/2001/mstts\" xml:lang=\"{language ?? "en-US"}\"><voice name=\"{voiceName ?? "en-US-Ava:DragonHDLatestNeural"}\" parameters=\"temperature={temperature ?? "1.0"}\"><prosody rate=\"{speedIncrease ?? "0"}%\" pitch=\"0%\"><mstts:express-as style=\"{voiceStyle ?? "story"}\" styledegree=\"{styleDegree ?? "2"}\">{content}</mstts:express-as></prosody></voice></speak>";
             batches.Add(batch);
 
             startIndex = endIndex;
