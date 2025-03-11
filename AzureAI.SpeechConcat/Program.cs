@@ -3,6 +3,7 @@ using NAudio.Wave.SampleProviders;
 using NAudio.Wave;
 using Microsoft.Extensions.Configuration;
 using AzureAI.Speech.Helpers;
+using AzureAI.SpeechConcat.Services;
 
 class Program
 {
@@ -11,55 +12,77 @@ class Program
         var appSettings = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
         var configuration = new ConfigurationHelper(appSettings);
 
+        string openAIEndpoint = configuration.GetConfigurationValue<string>("OpenAIEndpoint", true)!;
+        string openAIKey = configuration.GetConfigurationValue<string>("OpenAIKey", true)!;
+        string openAIDeployment = configuration.GetConfigurationValue<string>("OpenAIDeployment", true)!;
+        string systemMessageFilePath = configuration.GetConfigurationValue<string>("SystemMessageFilePath", true)!;
+
         string speechKey = configuration.GetConfigurationValue<string>("SpeechKey", true)!;
         string speechRegion = configuration.GetConfigurationValue<string>("SpeechRegion", true)!;
-        string textFilePath = configuration.GetConfigurationValue<string>("TextFilePath", true)!;
-        string? voiceName = configuration.GetConfigurationValue<string?>("VoiceName");
-        string? language = configuration.GetConfigurationValue<string?>("Language");
-        string? temperature = configuration.GetConfigurationValue<string?>("Temperature");
-        string? speedIncrease = configuration.GetConfigurationValue<string?>("SpeedIncrease");
-        string? voiceStyle = configuration.GetConfigurationValue<string?>("SpeakingStyle");
-        string? styleDegree = configuration.GetConfigurationValue<string?>("StyleDegree");
-        string? audioFileName = configuration.GetConfigurationValue<string?>("AudioFileName");
-        int? breakDuration = configuration.GetConfigurationValue<int?>("BreakDuration");
-        bool? useBatchSynth = configuration.GetConfigurationValue<bool?>("UseBatchSynth");
+
+        string inputTextFilePath = configuration.GetConfigurationValue<string>("InputTextFilePath", true)!;
+        string? outputAudioFileName = configuration.GetConfigurationValue<string?>("OutputAudioFileName");
+
         bool? saveSsml = configuration.GetConfigurationValue<bool?>("SaveSsml");
+        bool? useExistingSsml = configuration.GetConfigurationValue<bool?>("UseExistingSsml");
+        bool? useBatchSynthesis = configuration.GetConfigurationValue<bool?>("UseBatchSynthesis");
 
-        var directoryPath = Path.GetDirectoryName(textFilePath) ?? throw new Exception("Text file path is invalid.");
-        var batches = PrepareBatches(textFilePath, 5000, voiceName, language, temperature, speedIncrease, voiceStyle, styleDegree, breakDuration, saveSsml);
+        var directoryPath = Path.GetDirectoryName(inputTextFilePath) ?? throw new Exception("Text file path is invalid.");
 
-        var audioFilePaths = useBatchSynth == true ?
+        if (useExistingSsml == false || GetBatches(directoryPath).Count == 0)
+        {
+            await PrepareBatches(openAIEndpoint, openAIKey, openAIDeployment, systemMessageFilePath, inputTextFilePath, saveSsml);        
+            Console.WriteLine("SSML files have now been generated and saved on disk. You can now make modifications to them if desired. Press any key to proceed with speech synthesis.");
+            Console.ReadKey();
+        }
+
+        var batches = GetBatches(directoryPath);
+
+        var audioFilePaths = useBatchSynthesis == true ?
             await ConcatBatchSynthesizer.Run(speechKey, speechRegion, batches, directoryPath) :
             await ConcatSpeechSynthesizer.Run(speechKey, speechRegion, batches, directoryPath);
 
-        ConcatAudioFiles(audioFilePaths, directoryPath, $"{audioFileName ?? "result"}.wav");
+        ConcatAudioFiles(audioFilePaths, directoryPath, $"{outputAudioFileName ?? "result"}.wav");
     }    
 
-    private static List<string> PrepareBatches(string textFilePath, int batchLength, string? voiceName, string? language, string? temperature, string? speedIncrease, string? voiceStyle, string? styleDegree, int? breakDuration, bool? saveSsml)
+    private static async Task PrepareBatches(string openAiEndpoint, string openAiKey, string openAiDeployment, string systemMessageFilePath, string inputTextFilePath, bool? saveSsml)
+    {
+        var openAiService = new OpenAIService(openAiEndpoint, openAiKey, openAiDeployment, File.ReadAllText(systemMessageFilePath));
+
+        var textContent = File.ReadAllText(inputTextFilePath);
+
+        var startIndex = 0;
+        var batchLength = 2000;
+        var breakAt = "\r\n";
+
+        while (startIndex < textContent.Length)
+        {
+            var endIndex = startIndex + batchLength < textContent.Length ? textContent.LastIndexOf(breakAt, startIndex + batchLength) + breakAt.Length : textContent.Length;
+            var input = textContent.Substring(startIndex, endIndex - startIndex);
+
+            var response = await openAiService.Chat(input);
+            response = response.Replace("```xml", "").Replace("```", "");
+
+            if (saveSsml == true)
+                File.WriteAllText($"{Path.GetDirectoryName(inputTextFilePath)}\\{endIndex}.ssml", response);
+
+            startIndex = endIndex;
+        }
+    }   
+    
+    private static List<string> GetBatches(string directoryPath)
     {
         var batches = new List<string>();
 
-        var textContent = File.ReadAllText(textFilePath);
-        var breakTag = $"<break time=\"{breakDuration ?? 500}ms\"/>";
-        var ssmlContent = $"<p>{textContent.Replace("\r\n", "</p><p>").Replace("<p></p>", "").Replace("<p/>", "").Replace("</p><p>", $"</p>{breakTag}<p>").Replace("***", $"{breakTag}{breakTag}")}</p>{breakTag}";
+        var files = Directory.GetFiles(directoryPath, "*.ssml").OrderBy(f => int.Parse(Path.GetFileNameWithoutExtension(f))).ToArray();
 
-        var startIndex = 0;
-        while (startIndex < ssmlContent.Length)
+        foreach (var file in files)
         {
-            var endIndex = startIndex + batchLength < ssmlContent.Length ? ssmlContent.LastIndexOf(breakTag, startIndex + batchLength) + breakTag.Length : ssmlContent.Length;
-            var content = ssmlContent.Substring(startIndex, endIndex - startIndex);
-
-            var batch = $"<speak version=\"1.0\" xmlns=\"http://www.w3.org/2001/10/synthesis\" xmlns:mstts=\"https://www.w3.org/2001/mstts\" xml:lang=\"{language ?? "en-US"}\"><voice name=\"{voiceName ?? "en-US-Ava:DragonHDLatestNeural"}\" parameters=\"temperature={temperature ?? "1.0"}\"><prosody rate=\"{speedIncrease ?? "0"}%\" pitch=\"0%\"><mstts:express-as style=\"{voiceStyle ?? "story"}\" styledegree=\"{styleDegree ?? "2"}\">{content}</mstts:express-as></prosody></voice></speak>";
-            batches.Add(batch);
-
-            startIndex = endIndex;
-
-            if (saveSsml == true)
-                File.WriteAllText($"{Path.GetDirectoryName(textFilePath)}\\{startIndex}.ssml", string.Join("", batch));
+            batches.Add(File.ReadAllText(file));
         }
 
         return batches;
-    }    
+    }
 
     private static void ConcatAudioFiles(IEnumerable<string> inputFilePaths, string directoryPath, string outputFileName)
     {
