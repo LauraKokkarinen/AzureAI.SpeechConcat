@@ -2,34 +2,33 @@
 using NAudio.Wave.SampleProviders;
 using NAudio.Wave;
 using Microsoft.Extensions.Configuration;
+using AzureAI.Speech.Helpers;
 
 class Program
 {
     async static Task Main(string[] args)
     {
-        var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+        var appSettings = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
+        var configuration = new ConfigurationHelper(appSettings);
 
-        string? speechKey = configuration["SpeechKey"];
-        string? speechRegion = configuration["SpeechRegion"];
-        string? textFilePath = configuration["TextFilePath"];
-        string? voiceName = configuration["VoiceName"];
-        string? language = configuration["Language"];
-        string? temperature = configuration["Temperature"];
-        string? speedIncrease = configuration["SpeedIncrease"];
-        string? voiceStyle = configuration["VoiceStyle"];
-        string? styleDegree = configuration["StyleDegree"];
-        string? audioFileName = configuration["AudioFileName"];
-        _ = int.TryParse(configuration["BreakDuration"], out int breakDuration);
-        _ = bool.TryParse(configuration["UseBatchSynth"], out bool useBatchSynth);
-        _ = bool.TryParse(configuration["SaveSsml"], out bool saveSsml);
-
-        if (string.IsNullOrEmpty(speechKey) || string.IsNullOrEmpty(speechRegion) || string.IsNullOrEmpty(textFilePath))
-            throw new Exception("Missing required configuration values.");
+        string speechKey = configuration.GetConfigurationValue<string>("SpeechKey", true)!;
+        string speechRegion = configuration.GetConfigurationValue<string>("SpeechRegion", true)!;
+        string textFilePath = configuration.GetConfigurationValue<string>("TextFilePath", true)!;
+        string? voiceName = configuration.GetConfigurationValue<string?>("VoiceName");
+        string? language = configuration.GetConfigurationValue<string?>("Language");
+        string? temperature = configuration.GetConfigurationValue<string?>("Temperature");
+        string? speedIncrease = configuration.GetConfigurationValue<string?>("SpeedIncrease");
+        string? voiceStyle = configuration.GetConfigurationValue<string?>("SpeakingStyle");
+        string? styleDegree = configuration.GetConfigurationValue<string?>("StyleDegree");
+        string? audioFileName = configuration.GetConfigurationValue<string?>("AudioFileName");
+        int? breakDuration = configuration.GetConfigurationValue<int?>("BreakDuration");
+        bool? useBatchSynth = configuration.GetConfigurationValue<bool?>("UseBatchSynth");
+        bool? saveSsml = configuration.GetConfigurationValue<bool?>("SaveSsml");
 
         var directoryPath = Path.GetDirectoryName(textFilePath) ?? throw new Exception("Text file path is invalid.");
         var batches = PrepareBatches(textFilePath, 5000, voiceName, language, temperature, speedIncrease, voiceStyle, styleDegree, breakDuration, saveSsml);
 
-        var audioFilePaths = useBatchSynth ?
+        var audioFilePaths = useBatchSynth == true ?
             await ConcatBatchSynthesizer.Run(speechKey, speechRegion, batches, directoryPath) :
             await ConcatSpeechSynthesizer.Run(speechKey, speechRegion, batches, directoryPath);
 
