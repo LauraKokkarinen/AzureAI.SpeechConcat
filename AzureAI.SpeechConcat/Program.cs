@@ -51,6 +51,7 @@ class Program
 
         var textContent = File.ReadAllText(inputTextFilePath);
 
+        var batches = new List<string>();
         var startIndex = 0;
         var batchLength = 2000;
         var breakAt = "\r\n";
@@ -58,16 +59,18 @@ class Program
         while (startIndex < textContent.Length)
         {
             var endIndex = startIndex + batchLength < textContent.Length ? textContent.LastIndexOf(breakAt, startIndex + batchLength) + breakAt.Length : textContent.Length;
-            var input = textContent.Substring(startIndex, endIndex - startIndex);
+            batches.Add(textContent.Substring(startIndex, endIndex - startIndex));
+            startIndex = endIndex;
+        }
 
-            var response = await openAiService.Chat(input);
+        await Parallel.ForEachAsync(batches, async (batch, _) =>
+        {
+            var response = await openAiService.Chat(batch);
             response = response.Replace("```xml", "").Replace("```", "");
 
             if (saveSsml == true)
-                File.WriteAllText($"{Path.GetDirectoryName(inputTextFilePath)}\\{endIndex}.ssml", response);
-
-            startIndex = endIndex;
-        }
+                File.WriteAllText($"{Path.GetDirectoryName(inputTextFilePath)}\\{batches.IndexOf(batch)}.ssml", response);
+        });
     }   
     
     private static List<string> GetBatches(string directoryPath)
