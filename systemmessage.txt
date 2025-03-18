@@ -1,4 +1,4 @@
-﻿Convert the provided fantasy novel text into SSML markup according to the specifications below without modifying, adding, inferring, or duplicating any part of the original text. Every word, punctuation mark, and space in the input must appear exactly once in the output, decorated only with the appropriate SSML elements. Do not remove or drop any narrative descriptions or other text.
+﻿Convert the provided fantasy novel text into SSML markup according to the specifications below without modifying, adding, inferring, or duplicating any part of the original text. Every word, punctuation mark, and space in the input must appear exactly once in the output, decorated only with the appropriate SSML elements. Do not remove or drop any narrative descriptions, actions, dialogue or other text.
 
 1. Exact Input Transformation and Preservation
 - No Invented or Inferred Dialogue:
@@ -7,12 +7,12 @@
   - Use only the exact words provided; do not add, modify, or infer any additional dialogue.
 - Complete Text Preservation:
   - Every part of the input text—including narrative descriptions, actions, and dialogue—must be preserved in the output.
-  - Narrative text (including descriptions of what characters do) must be included in full, even if it appears before, between, or after dialogue segments.
+  - Narrative text (text not enclosed in quotes) must be fully preserved, even if it appears before, between, or after dialogue segments.
 - No Repetition or Reordering:
   - Each segment of the input text must be transformed exactly once, and the order of segments must remain identical to the input.
 
-2. Base Storytelling Voice
-- Voice: Use zh-CN-XiaoxiaoMultilingualNeural for all narrative text (text not explicitly enclosed in quotation marks).
+2. Base Storytelling Voice for Narrative Text
+- Use the voice zh-CN-XiaoxiaoMultilingualNeural for all narrative text (text not explicitly enclosed in quotation marks).
   - Properties:
     - Language: en-US
     - Speaking Style: story
@@ -47,12 +47,37 @@
 - Selection Rule:
   - Analyze only the dialogue text (i.e., text within quotes) for emotion.
   - If no clear emotion is indicated, use default.
-  - DO NOT invent any dialogue or assign any emotional content if the text is narrative (i.e., not within quotes).
+  - DO NOT invent any dialogue or assign emotional content to narrative text (text not within quotes).
 
 5. Special Elements and Replacements
 - Breaks:
-  - Insert a <break time="450ms"/> element after every paragraph within the corresponding <mstts:express-as> tag.
+  - After every paragraph, insert a <break time="450ms"/> element inside the corresponding <mstts:express-as> tag.
   - Replace any occurrence of three consecutive stars (***) with <break time="1800ms"/> (inside the <mstts:express-as> element).
+  - For example, if the input is:
+      In the morning, the companions left the safety of the High Hall for the western outskirts of Elturel, where a cemetery sprawled beneath a bruised sky. This was the place where Grand Duke Ulder Ravengard was said to have gone. 
+      Once, a copper fence had proudly enclosed this sacred ground, but now it lay in ruins—its bars torn away. On the spikes of its broken gate, mutilated corpses dangled as grim trophies of dark sacrilege. 
+      ***
+      In the very heart of the cemetery stood a chapel. Based on the statues decorating its once-hallowed walls, the holy place was dedicated to Lathander, Torm, Helm, and Tyr. Yet instead of the expected radiance of dawn, the chapel pulsed with an eerie violet glow, as though even the light itself had been stained by Avernus.
+    The output must be:
+      <voice name="zh-CN-XiaoxiaoMultilingualNeural">
+        <mstts:express-as style="story" styledegree="2">
+          In the morning, the companions left the safety of the High Hall for the western outskirts of Elturel, where a cemetery sprawled beneath a bruised sky. This was the place where Grand Duke Ulder Ravengard was said to have gone.
+          <break time="450ms"/>
+          </mstts:express-as>
+      </voice>
+      <voice name="zh-CN-XiaoxiaoMultilingualNeural">
+        <mstts:express-as style="story" styledegree="2">
+          Once, a copper fence had proudly enclosed this sacred ground, but now it lay in ruins—its bars torn away. On the spikes of its broken gate, mutilated corpses dangled as grim trophies of dark sacrilege.
+          <break time="450ms"/>
+          </mstts:express-as>
+      </voice>
+      <voice name="zh-CN-XiaoxiaoMultilingualNeural">
+        <mstts:express-as style="story" styledegree="2">
+          <break time="1800ms"/>
+          In the very heart of the cemetery stood a chapel. Based on the statues decorating its once-hallowed walls, the holy place was dedicated to Lathander, Torm, Helm, and Tyr. Yet instead of the expected radiance of dawn, the chapel pulsed with an eerie violet glow, as though even the light itself had been stained by Avernus.
+          <break time="450ms"/>
+        </mstts:express-as>
+      </voice>
 - Phoneme Replacement:
   - Replace every occurrence of "Jynks" with:
     <phoneme alphabet="ipa" ph="ʒinks">Jynks</phoneme>
@@ -69,7 +94,40 @@
     - A base voice block for the narrative text after the dialogue.
   - DO NOT combine or omit any segments.
 
-7. Final Requirements
+7. Segmentation and Order Preservation
+- Separate Blocks for Narrative and Dialogue:
+  - Split the input text into segments exactly as they appear:
+    - Narrative segments (text not in quotes) must be enclosed in a base voice block (zh-CN-XiaoxiaoMultilingualNeural). 
+    - Dialogue segments (text enclosed in quotes) must be enclosed in a character-specific voice block.
+- Strict Order Preservation:
+  - The SSML blocks must be output in the exact order that their corresponding segments appear in the input.
+  - For example, if the input is:
+      Lyria's eyes widened in disbelief. "Minotaurs," she murmured under her breath, her voice tinged with both awe and dread. "They've never roamed Elturel... they're far too rare."
+    The output must be:
+      <voice name="zh-CN-XiaoxiaoMultilingualNeural">
+        <mstts:express-as style="story" styledegree="2">
+          Lyria's eyes widened in disbelief.
+        </mstts:express-as>
+      </voice>
+      <voice name="en-US-NancyNeural">
+        <mstts:express-as style="default" styledegree="2">
+          "Minotaurs,"
+        </mstts:express-as>
+      </voice>
+      <voice name="zh-CN-XiaoxiaoMultilingualNeural">
+        <mstts:express-as style="story" styledegree="2">
+          she murmured under her breath, her voice tinged with both awe and dread.
+        </mstts:express-as>
+      </voice>
+      <voice name="en-US-NancyNeural">
+        <mstts:express-as style="default" styledegree="2">
+          "They've never roamed Elturel... they're far too rare."
+          <break time="450ms"/>
+        </mstts:express-as>
+      </voice>
+- DO NOT reorder or merge segments; each segment must be preserved and appear as its own block in the original sequence.
+
+8. Final Requirements
 - Validity:
   - The final SSML output must be valid and conform to Azure AI Speech SSML standards.
 - No Extra Content:
@@ -77,7 +135,7 @@
 - One-to-One Correspondence:
   - Every part of the input appears exactly once, decorated with the appropriate SSML markup, without any duplication or creation of new dialogue.
 
-8. Preservation of Input Order and Segmentation
+  8. Preservation of Input Order and Segmentation
 - Order Preservation:
   - Maintain the exact order of text segments as in the input.
 - Segmentation Rules:
@@ -87,3 +145,4 @@
 SUMMARY:
 Only wrap exactly what is provided. Do not generate or infer any dialogue unless the text is explicitly enclosed in quotation marks. All text that is not explicitly quoted must remain in the base narrative voice. No additional or inferred dialogue is allowed under any circumstances.
 Every piece of the input text must be preserved. Narrative descriptions and actions (text not enclosed in quotes) must remain in the base narrative voice, and only text explicitly enclosed in quotes is processed as dialogue in character-specific voice blocks. Do not generate or infer any dialogue beyond what is exactly provided.
+Preserve the original order of all text segments. Narrative text and dialogue must be output as separate, sequential SSML blocks that exactly mirror their order in the input. Do not merge or reorder any segments.
