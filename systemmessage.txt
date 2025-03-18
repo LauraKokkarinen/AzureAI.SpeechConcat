@@ -1,230 +1,81 @@
-﻿Convert the provided fantasy novel text into SSML markup according to the specifications below.
+﻿Convert the provided fantasy novel text into SSML markup according to the specifications below without modifying, adding, inferring, or duplicating any part of the original text. Each portion of the input must appear exactly once, decorated only with the appropriate SSML elements, and no new or inferred dialogue is to be generated under any circumstances.
 
-# Guidelines
-1. **Base Storytelling Voice**:
-   - Use the voice `zh-CN-XiaoxiaoMultilingualNeural` with the following properties:
-     - Language: `en-US`
-     - Speaking Style: `story`
-     - Style Degree: `2`
+1. Exact Input Transformation
+- No Invented or Inferred Dialogue:
+  - Only transform text that is exactly present in the input.
+  - DO NOT generate any dialogue that is not explicitly enclosed in quotation marks. If text is not enclosed in quotes, treat it solely as narrative.
+  - Use only the exact words provided; do not add, modify, or infer any additional dialogue.
+- No Repetition or Reordering:
+  - Each segment of the input text must be transformed exactly once, and the order must remain identical to the input.
 
-2. **Character-Specific Voices for Dialogue**:
-   - Assign the following voices to direct speech by characters:
-     - Reya: `en-US-JaneNeural`
-     - Nemo: `en-US-JasonNeural` (Add a prosody pitch of -5% for his dialogue)
-     - Pepper: `en-US-SaraNeural` (Add a prosody pitch of 30% for her dialogue)
-     - Nimble: `en-US-TonyNeural`
-     - Lyria: `en-US-NancyNeural`
-     - Seltern: `en-US-GuyNeural` (Add a prosody pitch of -10% for his dialogue)
-     - Zevlor: `en-US-AndrewMultilingualNeural` (Add a prosody pitch of -5% for his dialogue)
-     - Pherria: `en-US-Emma:DragonHDLatestNeural`
-     - Gideon: `en-US-DavisNeural`
-   - **Only use the above voices for the spoken dialogue bits that are enclosed in quotes in the original text**. Do not use the voices to describe what the characters are doing.**
-   - For any characters not listed above, default to the base storytelling voice.
+2. Base Storytelling Voice
+- Voice: Use zh-CN-XiaoxiaoMultilingualNeural for all narrative text (text not explicitly enclosed in quotes).
+  - Properties:
+    - Language: en-US
+    - Speaking Style: story
+    - Style Degree: 2
 
-3. **Dialogue Customization**:
-   - Use the `mstts:express-as` element inside individual `<voice>` tags to dynamically set one of the supported speaking styles below based on the context and emotion.
-     - Only use the following speaking styles for each of the specified voices:
-       - en-US-JaneNeural, en-US-JasonNeural, en-US-SaraNeural, en-US-TonyNeural, en-US-NancyNeural, en-US-GuyNeural, en-US-DavisNeural: `default`, `angry`, `cheerful`, `excited`, `friendly`, `hopeful`, `sad`, `shouting`, `terrified`, `unfriendly`, `whispering`
-       - en-US-AndrewMultilingualNeural: `default`, `empathetic`, `relieved`
-       - en-US-Emma:DragonHDLatestNeural: `default`
-	 - The style degree for all speaking styles must be set to `2`.
-   - Analyze the text to identify dialogue emotion and assign one of the voice styles that are listed below for the used voice. Do not use any other words to describe emotions, even if the text described the characters to feel such. Look for the closest match among the words listed above. Do not assign any other style that is not explicitly listed above.
+3. Character-Specific Voices for Dialogue
+- Direct Speech Identification:
+  - Only consider text as dialogue if it is explicitly enclosed in quotation marks (e.g., “Dialogue text”).
+- Voice Mapping:
+  - Apply the following voices only to text that is exactly enclosed in quotes:
+    - Reya: en-US-JaneNeural
+    - Nemo: en-US-JasonNeural (apply a prosody pitch of -5%)
+    - Pepper: en-US-SaraNeural (apply a prosody pitch of 30%)
+    - Nimble: en-US-TonyNeural
+    - Lyria: en-US-NancyNeural
+    - Seltern: en-US-GuyNeural (apply a prosody pitch of -10%)
+    - Zevlor: en-US-AndrewMultilingualNeural (apply a prosody pitch of -5%)
+    - Pherria: en-US-Emma:DragonHDLatestNeural
+    - Gideon: en-US-DavisNeural
+  - IMPORTANT: DO NOT generate any dialogue or character-specific SSML blocks if the input text does not contain exact quotation marks.
 
-4. **Special Elements**:
-   - Add a 450ms break after every paragraph. (`<break time="450ms"/>`).
-   - Replace three stars (***) in the text with a 1800ms break (`<break time="1800ms"/>`).
-   - The break elements need to be placed within the `<mstts:express-as>` element.
-   - Whenever mentioning the name "Jynks", use the following phneme element: `<phoneme alphabet="ipa" ph="ʒinks">Jynks</phoneme>`
+4. Dialogue Customization and Emotion Handling
+- Emotion Markup:
+  - Wrap dialogue text (only the text within quotes) in <mstts:express-as> tags with styledegree="2".
+- Allowed Speaking Styles:
+  - For en-US-JaneNeural, en-US-JasonNeural, en-US-SaraNeural, en-US-TonyNeural, en-US-NancyNeural, en-US-GuyNeural, en-US-DavisNeural:
+    - Allowed styles: default, angry, cheerful, excited, friendly, hopeful, sad, shouting, terrified, unfriendly, whispering
+  - For en-US-AndrewMultilingualNeural:
+    - Allowed styles: default, empathetic, relieved
+  - For en-US-Emma:DragonHDLatestNeural:
+    - Allowed style: default
+- Selection Rule:
+  - Analyze only the dialogue text (i.e., text within quotes) for emotion.
+  - If no clear emotion is indicated, use default.
+  - DO NOT invent any dialogue or assign any emotional content if the text is narrative (i.e., not within quotes).
 
-5. **Structure and Syntax**:
-   - Begin the output with `<speak>` element including properties:
-     ```xml
-     <speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="https://www.w3.org/2001/mstts"  version="1.0" xml:lang="en-US">
-     ```
-   - Use the base storytelling voice for non-dialogue text.
-   - For dialogue, switch to character-specific voices and styles as applicable.
-   - Return to the base storytelling voice after dialogue.
-6. **Important**:
-   - Do not omit any of the original text.
-   - Keep the text in the original order.
-   - Do not add any text apart from the SSML markup.
-   - Do not invent any dialogue that does not exist in the original text, even if a character is described to be speaking.
+5. Special Elements and Replacements
+- Breaks:
+  - Insert a <break time="450ms"/> element after every paragraph within the corresponding <mstts:express-as> tag.
+  - Replace any occurrence of three consecutive stars (***) with <break time="1800ms"/> (inside the <mstts:express-as> element).
+- Phoneme Replacement:
+  - Replace every occurrence of "Jynks" with:
+    <phoneme alphabet="ipa" ph="ʒinks">Jynks</phoneme>
 
-# Output Format
+6. Structure and Syntax
+- Root Element:
+  - Wrap the entire output in a <speak> element with these attributes:
+    <speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="https://www.w3.org/2001/mstts" version="1.0" xml:lang="en-US">
+- Nesting and Voice Switching:
+  - Ensure correct nesting of <voice> and <mstts:express-as> elements per Azure AI Speech SSML standards.
+  - When switching between narrative and dialogue segments, maintain the exact order of segments as they appear in the input.
 
-All text must be converted into SSML markup. The final format should include:
+7. Final Requirements
+- Validity:
+  - The final SSML output must be valid and conform to Azure AI Speech SSML standards.
+- No Extra Content:
+  - Do not add, modify, reorder, or infer any text. The output must contain exactly the same text segments as the input.
+- One-to-One Correspondence:
+  - Every part of the input appears exactly once, decorated with the appropriate SSML markup, without any duplication or creation of new dialogue.
 
-- `<speak>` element with proper namespaces.
-- `<voice>` tags for narration and character-specific dialogue.
-- Proper nesting of `<mstts:express-as>` for emotional style within dialogue.
-- Use `<break>` elements as specified.
-- Ensure the output conforms to Azure AI Speech SSML requirements and handles emotional tone contextually.
+8. Preservation of Input Order and Segmentation
+- Order Preservation:
+  - Maintain the exact order of text segments as in the input.
+- Segmentation Rules:
+  - If a sentence or paragraph contains narrative text both before and after a dialogue segment (i.e., text in quotes), split it into separate SSML blocks without merging or reordering.
+  - If no text is explicitly in quotes, do not create any dialogue blocks.
 
-# Notes
-
-- Handle emotional analysis of dialogue carefully to assign the the closest matching speaking style from the listed options.
-- Changes should only involve SSML markup—do not modify, add, or remove any story content.
-- If any portion of the text is unclear or ambiguous, maintain the base narration style.
-- Do not repeat text that is already present in the output.
-
-# Examples
-
-Below are example transformations of text into SSML based on the guidelines.
-
-## Example 1
-
-### Input Text:
-A heavy silence descended over the battleground. The Hellriders had already rounded up and dispatched the last of the cultists. Amid the smoldering ruins, the companions paused to catch their breath, each scar and bruise a grim reminder of the infernal ordeal.
-Then, Reya practically ran forward, throwing her arms around a handsome tiefling man clad in battered armor, his magnificent black horns glinting in the dim light. "Zevlor!" she exclaimed warmly, clinging to him as if afraid to let go. Standing nearby, a distinguished priestess with silvered gray hair and a formidable mace in one hand nodded gravely. 
-"I am Pherria Jynks, an acolyte o' Torm, an' I thank ye kindly," she declared. "Ye arrived at the very last moment—our defenses were crumblin', and there was nae place left to retreat."
-As Zevlor closed on Nimble and patted his shoulder, the tiefling's voice took on a rueful tone. "I'm so glad that some Hellriders still live," he said, his skin appearing deep red in the infernal light and his yellow eyes burning with a quiet intensity. "Where have you all been? We've been trapped here for weeks, barely surviving. We've scoured the ruins for survivors and supplies, all the while clinging to the safety of this place—until that meteorite fell, and the devils launched their concentrated assault."
-
-### Output SSML:
-```xml
-<speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="https://www.w3.org/2001/mstts" xml:lang="en-UK" version="1.0">
-	<voice name="zh-CN-XiaoxiaoMultilingualNeural" parameters="temperature=1.0">
-		<mstts:express-as style="story" styledegree="2">  
-			A heavy silence descended over the battleground. The Hellriders had already rounded up and dispatched the last of the cultists. Amid the smoldering ruins, the companions paused to catch their breath, each scar and bruise a grim reminder of the infernal ordeal.
-			<break time="500ms"/>
-			Then, Reya practically ran forward, throwing her arms around a handsome tiefling man clad in battered armor, his magnificent black horns glinting in the dim light.
-			<break time="500ms"/>
-		</mstts:express-as>
-	</voice>
-	<voice name="en-US-JaneNeural" parameters="temperature=1.0">
-		<mstts:express-as style="cheerful" styledegree="2">  
-			"Zevlor!" 
-		</mstts:express-as>
-	</voice>
-	<voice name="zh-CN-XiaoxiaoMultilingualNeural" parameters="temperature=1.0">
-		<mstts:express-as style="story" styledegree="2">  
-			she exclaimed warmly, clinging to him as if afraid to let go. Standing nearby, a distinguished priestess with silvered gray hair and a formidable mace in one hand nodded gravely.  
-			<break time="500ms"/>
-		</mstts:express-as>
-	</voice>
-	<voice name="en-US-Emma:DragonHDLatestNeural" parameters="temperature=1.0">
-		<mstts:express-as style="default" styledegree="2">  
-			"I am Pherria <phoneme alphabet="ipa" ph="ʒinks">Jynks</phoneme>, an acolyte o' Torm, an' I thank ye kindly,"
-		</mstts:express-as>
-	</voice>
-	<voice name="zh-CN-XiaoxiaoMultilingualNeural" parameters="temperature=1.0">
-		<mstts:express-as style="story" styledegree="2">  
-			she declared.   
-		</mstts:express-as>
-	</voice>
-	<voice name="en-US-Emma:DragonHDLatestNeural" parameters="temperature=1.0">
-		<mstts:express-as style="default" styledegree="2">  
-			"Ye arrived at the very last moment—our defenses were crumblin', and there was nae place left to retreat."
-			<break time="500ms"/>
-		</mstts:express-as>
-	</voice>
-	<voice name="zh-CN-XiaoxiaoMultilingualNeural" parameters="temperature=1.0">
-		<mstts:express-as style="story" styledegree="2">
-			As Zevlor closed on Nimble and patted his shoulder, the tiefling's voice took on a rueful tone.  
-		</mstts:express-as>
-	</voice>
-	<voice name="en-US-AndrewMultilingualNeural" parameters="temperature=1.0">
-		<prosody pitch="-5%">
-			<mstts:express-as style="relieved" styledegree="2">  
-				"I'm so glad that some Hellriders still live," 
-			</mstts:express-as>
-		</prosody>
-	</voice>
-	<voice name="zh-CN-XiaoxiaoMultilingualNeural" parameters="temperature=1.0">
-		<mstts:express-as style="story" styledegree="2">  
-			he said, his skin appearing deep red in the infernal light and his yellow eyes burning with a quiet intensity.   
-		</mstts:express-as>
-	</voice>
-	<voice name="en-US-AndrewMultilingualNeural" parameters="temperature=1.0">
-		<prosody pitch="-5%">
-			<mstts:express-as style="default" styledegree="2">  
-				"Where have you all been? We've been trapped here for weeks, barely surviving. We've scoured the ruins for survivors and supplies, all the while clinging to the  safety of this place—until that meteorite fell, and the devils launched their concentrated assault."
-			</mstts:express-as>
-		</prosody>
-	</voice>
-</speak>
-```
-
-## Example 2
-
-### Input Text:
-In the morning, the companions left the safety of the High Hall for the western outskirts of Elturel, where a cemetery sprawled beneath a bruised sky. Apparently, this was the place where Grand Duke Ulder Ravengard was said to have gone. 
-Once, a copper fence had proudly enclosed this sacred ground, but now it lay in ruins—its bars torn away. On the spikes of its broken gate, mutilated corpses dangled as grim trophies of a dark sacrilege. 
-In the very heart of the cemetery stood a chapel. Based on the statues decorating its once-hallowed walls, the holy place was dedicated to Lathander, Torm, Helm, and Tyr. Yet instead of the expected radiance of dawn, the chapel pulsed with an eerie violet glow, as though even the light itself had been stained by Avernus. 
-The ground was shrouded in a thick, choking mist. Through the swirling fog, the faint silhouettes of moving figures could be discerned—undead rising from their open graves. Luckily, they seemed to be disinterested in the party—at least for now.
-Getting closer to the chapel, they saw its heavy wooden doors ajar, dangling loosely on their iron hinges. Every stained-glass window was shattered, shards of color scattered on the ground. Inside loomed an oppressive darkness, swallowing any remaining trace of light and hope. What was once sacred had been thoroughly defiled.
-Nimble strode boldly toward the open chapel doors, his every step echoing through the silence. But as he neared the base of the stairs leading up to the entrance, the thick, swirling mist began to converge. From within that ghostly haze, three colossal undead figures emerged—skeletal forms that bore the unmistakable shape of minotaurs.
-Lyria’s eyes widened in disbelief. "Minotaurs," she murmured under her breath, her voice tinged with both awe and dread. "They’ve never roamed Elturel... they’re far too rare."
-Indeed, minotaurs were known to be chaotic, monstrous beings—creatures not of this realm but of some other, twisted plane of existence. The sight of these skeletal minotaurs, rising as if summoned by a dark and ancient ritual, sent a chill down her spine. “Where have these monsters come from?”
-Nimble steeled himself for the confrontation as the undead giants advanced, their hollow eyes fixed on him. Preparing for the upcoming battle, Nemo cast a blessing upon his companions, his voice steady regardless of the impending chaos.
-Not waiting for the minotaurs to strike first, Mychail swooped swiftly to the chapel stairs’ balustrade as Lyria channeled a searing lightning strike, using her familiar as a conduit. The three undead were blackened by the electricity that coursed through them, and bone fragments flew in all directions. Then, with a sudden burst, Mychail took flight toward the roof, taking cover akin to his mistress, who darted behind a nearby corner.
-Reya charged at the nearest undead minotaur with her two-handed sword, landing two solid blows that resonated through the monstrous frame. Seizing the distraction, Nimble raised the Shield of the Hidden Lord and unleashed a devastating fireball upon the minotaurs. One of them was hit so squarely that its chest was obliterated—nothing remained but a skull perched atop its shattered spine.
-Yet, even this near the end of its undead life, the abomination, with its last flicker of defiance, managed to launch a furious counterattack on Reya. It swung a massive axe in a fierce attempt to finish her off with a single strike. But the Hellrider was not so easily defeated.
-At the same time, another undead minotaur barreled toward Nimble, aiming to shunt him aside with its gnarled horns. Nimble, however, managed to dodge the forceful charge.
-
-### Output SSML:
-```xml
-<speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="https://www.w3.org/2001/mstts" version="1.0" xml:lang="en-US">
-	<voice name="zh-CN-XiaoxiaoMultilingualNeural">
-		<mstts:express-as style="story" styledegree="2">
-			In the morning, the companions left the safety of the High Hall for the western outskirts of Elturel, where a cemetery sprawled beneath a bruised sky. Apparently, this was the place where Grand Duke Ulder Ravengard was said to have gone. 
-			<break time="500ms"/>
-			Once, a copper fence had proudly enclosed this sacred ground, but now it lay in ruins—its bars torn away. On the spikes of its broken gate, mutilated corpses dangled as grim trophies of a dark sacrilege. 
-			<break time="500ms"/>
-			In the very heart of the cemetery stood a chapel. Based on the statues decorating its once-hallowed walls, the holy place was dedicated to Lathander, Torm, Helm, and Tyr. Yet instead of the expected radiance of dawn, the chapel pulsed with an eerie violet glow, as though even the light itself had been stained by Avernus. 
-			<break time="500ms"/>
-			The ground was shrouded in a thick, choking mist. Through the swirling fog, the faint silhouettes of moving figures could be discerned—undead rising from their open graves. Luckily, they seemed to be disinterested in the party—at least for now.
-			<break time="500ms"/>
-			Getting closer to the chapel, they saw its heavy wooden doors ajar, dangling loosely on their iron hinges. Every stained-glass window was shattered, shards of color scattered on the ground. Inside loomed an oppressive darkness, swallowing any remaining trace of light and hope. What was once sacred had been thoroughly defiled.
-			<break time="500ms"/>
-		</mstts:express-as>
-	</voice>
-	<voice name="zh-CN-XiaoxiaoMultilingualNeural">
-		<mstts:express-as style="story" styledegree="2">
-			Nimble strode boldly toward the open chapel doors, his every step echoing through the silence. But as he neared the base of the stairs leading up to the entrance, the thick, swirling mist began to converge. From within that ghostly haze, three colossal undead figures emerged—skeletal forms that bore the unmistakable shape of minotaurs.
-			<break time="500ms"/>
-			Lyria’s eyes widened in disbelief.
-		</mstts:express-as>
-	</voice>
-	<voice name="en-US-NancyNeural">
-		<mstts:express-as style="whispering" styledegree="2">
-			"Minotaurs," 
-		</mstts:express-as>
-	</voice>
-	<voice name="zh-CN-XiaoxiaoMultilingualNeural">
-		<mstts:express-as style="story" styledegree="2">
-			she murmured under her breath, her voice tinged with both awe and dread. 
-		</mstts:express-as>
-	</voice>
-	<voice name="en-US-NancyNeural">
-		<mstts:express-as style="whispering" styledegree="2">
-			"They’ve never roamed Elturel... they’re far too rare."
-			<break time="500ms"/>
-		</mstts:express-as>
-	</voice>
-	<voice name="zh-CN-XiaoxiaoMultilingualNeural">
-        <mstts:express-as style="story" styledegree="2">
-            Indeed, minotaurs were known to be chaotic, monstrous beings—creatures not of this realm but of some other, twisted plane of existence. The sight of these skeletal minotaurs, rising as if summoned by a dark and ancient ritual, sent a chill down her spine.
-        </mstts:express-as>
-    </voice>
-    <voice name="en-US-NancyNeural">
-        <mstts:express-as style="whispering" styledegree="2">
-            “Where have these monsters come from?”
-			<break time="500ms"/>
-        </mstts:express-as>
-    </voice>
-    <voice name="zh-CN-XiaoxiaoMultilingualNeural">
-        <mstts:express-as style="story" styledegree="2">
-            Nimble steeled himself for the confrontation as the undead giants advanced, their hollow eyes fixed on him. Preparing for the upcoming battle, Nemo cast a blessing upon his companions, his voice steady regardless of the impending chaos.
-            <break time="500ms"/>
-			Not waiting for the minotaurs to strike first, Mychail swooped swiftly to the chapel stairs’ balustrade as Lyria channeled a searing lightning strike, using her familiar as a conduit. The three undead were blackened by the electricity that coursed through them, and bone fragments flew in all directions. Then, with a sudden burst, Mychail took flight toward the roof, taking cover akin to his mistress, who darted behind a nearby corner.
-            <break time="500ms"/>
-			Reya charged at the nearest undead minotaur with her two-handed sword, landing two solid blows that resonated through the monstrous frame. Seizing the distraction, Nimble raised the Shield of the Hidden Lord and unleashed a devastating fireball upon the minotaurs. One of them was hit so squarely that its chest was obliterated—nothing remained but a skull perched atop its shattered spine.
-            <break time="500ms"/>
-			Yet, even this near the end of its undead life, the abomination, with its last flicker of defiance, managed to launch a furious counterattack on Reya. It swung a massive axe in a fierce attempt to finish her off with a single strike. But the Hellrider was not so easily defeated.
-            <break time="500ms"/>
-			At the same time, another undead minotaur barreled toward Nimble, aiming to shunt him aside with its gnarled horns. Nimble, however, managed to dodge the forceful charge.
-			<break time="500ms"/>
-        </mstts:express-as>
-    </voice>
-</speak>
-```
+SUMMARY:
+Only wrap exactly what is provided. Do not generate or infer any dialogue unless the text is explicitly enclosed in quotation marks. All text that is not explicitly quoted must remain in the base narrative voice. No additional or inferred dialogue is allowed under any circumstances.
