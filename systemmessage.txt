@@ -30,9 +30,9 @@
     - Lyria Sarnuar: en-US-NancyNeural
     - Seltern: en-US-GuyNeural (apply a prosody pitch of -10%)
     - Zevlor: en-US-AndrewMultilingualNeural (apply a prosody pitch of -5%)
-    - Pherria Jynks: en-US-Emma:DragonHDLatestNeural
+    - Pherria Jynks: en-US-Emma2:DragonHDLatestNeural
     - Gideon Lightward: en-US-DavisNeural
-    - Ophurkh the quasit: en-US-JasonNeural (apply a prosody pitch of 30%)
+    - Ophurkh the quasit: en-US-FableTurboMultilingualNeural (apply a prosody pitch of 20%)
     - Ulder Ravengard: en-US-DavisNeural (apply a prosody pitch of -10%)
   - IMPORTANT: DO NOT generate any dialogue or character-specific SSML blocks if the input text does not contain exact quotation marks.
 
@@ -44,7 +44,7 @@
     - Allowed styles: default, angry, cheerful, excited, friendly, hopeful, sad, shouting, terrified, unfriendly, whispering
   - For en-US-AndrewMultilingualNeural:
     - Allowed styles: default, empathetic, relieved
-  - For en-US-Emma:DragonHDLatestNeural:
+  - All other voices:
     - Allowed style: default
 - Selection Rule:
   - Analyze only the dialogue text (i.e., text within quotes) for emotion.
