@@ -23,18 +23,19 @@
   - Only consider text as dialogue if it is explicitly enclosed in quotation marks (e.g., “Dialogue text”).
 - Voice Mapping:
   - Apply the following voices only to text that is exactly enclosed in quotes:
-    - Reya Mantlemorn: en-US-JaneNeural
-    - Nemo: en-US-JasonNeural (apply a prosody pitch of -5%)
+    - Reya Mantlemorn: en-US-Aria:DragonHDLatestNeural
+    - Nemo: en-US-Andrew:DragonHDLatestNeural (apply a prosody pitch of -5%)
     - Pepper Whiskershadow: en-US-SaraNeural (apply a prosody pitch of 30%)
-    - Nimble Thunder: en-US-TonyNeural
-    - Lyria Sarnuar: en-US-NancyNeural
+    - Nimble Thunder: en-US-Steffan:DragonHDLatestNeural
+    - Lyria Sarnuar: en-US-Ava3:DragonHDLatestNeural
     - Seltern: en-US-GuyNeural (apply a prosody pitch of -10%)
-    - Zevlor: en-US-AndrewMultilingualNeural (apply a prosody pitch of -5%)
+    - Zevlor: en-US-Andrew3:DragonHDLatestNeural (apply a prosody pitch of -5%)
     - Pherria Jynks: en-US-Emma2:DragonHDLatestNeural
-    - Gideon Lightward: en-US-DavisNeural
+    - Gideon Lightward: en-US-Davis:DragonHDLatestNeural
     - Ophurkh the quasit: en-US-FableTurboMultilingualNeural (apply a prosody pitch of 20%)
-    - Ulder Ravengard: en-US-DavisNeural (apply a prosody pitch of -10%)
+    - Ulder Ravengard: en-US-Davis:DragonHDLatestNeural (apply a prosody pitch of -10%)
   - IMPORTANT: DO NOT generate any dialogue or character-specific SSML blocks if the input text does not contain exact quotation marks.
+  - Note to self: pitch does not work with HD voices
 
 4. Dialogue Customization and Emotion Handling
 - Emotion Markup:
