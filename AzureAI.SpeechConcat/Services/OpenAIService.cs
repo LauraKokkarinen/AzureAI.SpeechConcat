@@ -4,19 +4,21 @@ using OpenAI.Chat;
 
 namespace AzureAI.SpeechConcat.Services
 {
-    public class OpenAIService(string endpoint, string key, string deployment, string systemMessage)
+    public class OpenAIService
     {
-        private readonly string _endpoint = endpoint;
-        private readonly string _key = key;
-        private readonly string _deployment = deployment;
-        private readonly string _systemMessage = systemMessage;
+        private readonly ChatClient _chatClient;
+        private readonly string _systemMessage;
+
+        public OpenAIService(string endpoint, string key, string deployment, string systemMessage)
+        {
+            var client = new AzureOpenAIClient(new Uri(endpoint), new AzureKeyCredential(key));
+            _chatClient = client.GetChatClient(deployment);
+
+            _systemMessage = systemMessage;
+        }
 
         public async Task<string> Chat(string userMessage)
         {
-            var client = new AzureOpenAIClient(new Uri(_endpoint), new AzureKeyCredential(_key));
-
-            ChatClient chatClient = client.GetChatClient(_deployment);            
-
             var messages = new List<ChatMessage>
             {
                 new SystemChatMessage(_systemMessage),
@@ -32,9 +34,22 @@ namespace AzureAI.SpeechConcat.Services
                 PresencePenalty = 0
             };
 
-            var completion = await chatClient.CompleteChatAsync(messages, options);
+            try
+            {
+                var completion = await _chatClient.CompleteChatAsync(messages, options);
 
-            return completion.Value.Content.First().Text;
+                return completion.Value.Content.First().Text;
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message.Contains("429"))
+                {
+                    Thread.Sleep(5000);
+                    return await Chat(userMessage);
+                }
+
+                throw;
+            }
         }
     }
 }
