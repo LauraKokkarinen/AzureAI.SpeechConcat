@@ -10,8 +10,11 @@ namespace AzureAI.Speech.Helpers
         {
             var value = _configuration[key];
 
-            if (mandatory && value == null)
+            if (mandatory && string.IsNullOrWhiteSpace(value))
                 throw new ArgumentNullException(nameof(key), $"{key} is null.");
+
+            if (mandatory == false && string.IsNullOrWhiteSpace(value))
+                return default;
 
             if (typeof(T) == typeof(int) || typeof(T) == typeof(int?))
             {
