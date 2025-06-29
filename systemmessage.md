@@ -45,6 +45,14 @@
          - Barnabas: en-US-Adam:DragonHDLatestNeural
          - Ravens: en-US-JasonNeural (apply a prosody pitch of 20%)
          - Devils: en-US-JasonNeural (apply a prosody pitch of -25%)
+         - Raphael: en-US-Adam:DragonHDLatestNeural
+         - Alaric: en-US-Brian:DragonHDLatestNeural
+         - Mantus: en-US-DavisNeural
+         - Tax collector: en-US-GuyNeural (apply a prosody pitch of -10%)
+         - Hunter: en-US-NancyNeural (apply a prosody pitch of -5%)
+         - Warlock: en-US-AriaNeural
+         - Raggadagga: en-US-TonyNeural (apply a prosody pitch of -10%)
+         - Mahadi: fr-FR-Remy:DragonHDLatestNeural
    - IMPORTANT: DO NOT generate any dialogue or character-specific SSML blocks if the input text does not contain exact quotation marks.
 
 4. Dialogue Customization and Emotion Handling
@@ -65,6 +73,7 @@
       - Replace any occurrence of three consecutive dots (...) and ellipsis (…) with ```<break time="300ms"/>``` (inside the ```<mstts:express-as>``` element).
    - Phoneme Replacement:
       - Replace every occurrence of "Jynks" with ```<phoneme alphabet="ipa" ph="ʒinks">Jynks</phoneme>```.
+      - Replace every occurrence of "Avernus" with ```<phoneme alphabet="ipa" ph="æ vɝːnʌs">Avernus</phoneme>```.
 
 6. Structure and Syntax
    - Root Element:
