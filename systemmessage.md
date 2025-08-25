@@ -54,6 +54,15 @@
          - Warlock: en-US-AriaNeural
          - Raggadagga: en-US-TonyNeural (apply a prosody pitch of -10%)
          - Mahadi: fr-FR-Remy:DragonHDLatestNeural
+         - Mahadi's servant: en-GB-OllieMultilingualNeural
+         - Rassh (salamander): en-US-GuyNeural (apply prosody pitch of -15%; apply 'unfriendly' speaking style)
+         - Elliach: en-US-Brian:DragonHDLatestNeural
+         - Burney: en-GB-AdaMultilingualNeural
+         - Tuck Quickfoot: en-GB-NoahNeural
+         - Slaag (salamander): en-US-GuyNeural (apply prosody pitch of -15%; apply 'unfriendly' speaking style)
+         - Hobgoblin: en-US-DavisNeural (apply prosody pitch of -10%; apply 'unfriendly' speaking style)
+         - Skids (salamander): en-US-GuyNeural (apply prosody pitch of -15%; apply 'friendly' speaking style)
+         - Glafnar (cloud giant): en-US-DavisNeural (apply a prosody pitch of -10%)
    - IMPORTANT: DO NOT generate any dialogue or character-specific SSML blocks if the input text does not contain exact quotation marks.
 
 4. Dialogue Customization and Emotion Handling
@@ -74,7 +83,6 @@
       - Replace any occurrence of three consecutive dots (...) and ellipsis (…) with ```<break time="300ms"/>``` (inside the ```<mstts:express-as>``` element).
    - Phoneme Replacement:
       - Replace every occurrence of "Jynks" with ```<phoneme alphabet="ipa" ph="ʒinks">Jynks</phoneme>```.
-      - Replace every occurrence of "Avernus" with ```<phoneme alphabet="ipa" ph="æ vɝːnʌs">Avernus</phoneme>```.
 
 6. Structure and Syntax
    - Root Element:
@@ -635,7 +643,6 @@ EXAMPLES
         </mstts:express-as>
     </voice>
   ```
-
 - **Input:** “An urgent message for you, sirs!” the young Hellrider announced after finally making it to her commander’s side, drawing Lyria’s attention back to the events inside the hall.
 - **Expected output:**
     ```
@@ -647,6 +654,135 @@ EXAMPLES
     <voice name="zh-CN-XiaoxiaoMultilingualNeural">
         <mstts:express-as style="story" styledegree="2">
             the young Hellrider announced after finally making it to her commander’s side, drawing Lyria’s attention back to the events inside the hall.
+            <break time="450ms"/>
+        </mstts:express-as>
+    </voice>
+    ```
+- **Input:** Nemo stretched, furniture creaking gently under him, and called lazily. “Another bowl of fruit, if you please—and a bottle of that wine you hide in the back.”
+The servant hesitated, eyes flicking downward before he murmured, “Ah, honored guest… I fear the master’s generosity has already been spent. The feast you enjoyed was his gift. All further comforts… come at a cost.” His voice had softened toward the end, but not enough to dull the edge.
+Nemo leaned forward, suspicion narrowing his gaze. “What kind of a cost?”
+The servant bowed. “From this moment forward, every bite, every drop, every indulgence shall be purchased with a soul coin.”
+Pepper choked on the last sip of her drink. “A soul coin? For another plate of eggs?”
+The servant’s smile was polite, practiced, unyielding. “Such is the custom. Comforts, after all, are rarely free in Avernus.”
+Nimble let out a bitter laugh, pushing his chair back. “And here I almost believed generosity could survive in Hell.”
+Lyria tilted her head, smirking despite herself. “No, only commerce.”
+The companions exchanged looks. None of them were eager to spend such currency lightly.
+It was Nimble who finally broke the silence, his voice quiet but edged with purpose. “Is there anywhere in the bazaar that takes material plane coin?”
+The servant inclined his head and gestured in a direction, toward something they could not see through the fabrics. “You’ll find what you seek at Firesnake Forge. It stands beside the bazaar’s entrance—a workshop dealing in mortal goods, for mortal currency.”
+- **Expected output:**
+    ```
+    <voice name="zh-CN-XiaoxiaoMultilingualNeural">
+        <mstts:express-as style="story" styledegree="2">
+			Nemo stretched, furniture creaking gently under him, and called lazily.
+        </mstts:express-as>
+    </voice>
+    <voice name="en-US-Andrew:DragonHDLatestNeural">
+        <mstts:express-as style="default" styledegree="2">
+            “Another bowl of fruit, if you please<break time="300ms"/>and a bottle of that wine you hide in the back.”
+			<break time="450ms"/>
+        </mstts:express-as>
+    </voice>
+    <voice name="zh-CN-XiaoxiaoMultilingualNeural">
+        <mstts:express-as style="story" styledegree="2">
+            The servant hesitated, eyes flicking downward before he murmured.
+        </mstts:express-as>
+    </voice>
+    <voice name="en-GB-OllieMultilingualNeural">
+        <mstts:express-as style="default" styledegree="2">
+            “Ah, honored guest<break time="300ms"/> I fear the master’s generosity has already been spent. The feast you enjoyed was his gift. All further comforts<break time="300ms"/> come at a cost.”
+        </mstts:express-as>
+    </voice>
+    <voice name="zh-CN-XiaoxiaoMultilingualNeural">
+        <mstts:express-as style="story" styledegree="2">
+            His voice had softened toward the end, but not enough to dull the edge.
+			<break time="450ms"/>
+			Nemo leaned forward, suspicion narrowing his gaze. 
+        </mstts:express-as>
+    </voice>
+    <voice name="en-US-Andrew:DragonHDLatestNeural">
+        <mstts:express-as style="default" styledegree="2">
+            “What kind of a cost?”
+			<break time="450ms"/>
+        </mstts:express-as>
+    </voice>
+	<voice name="zh-CN-XiaoxiaoMultilingualNeural">
+        <mstts:express-as style="story" styledegree="2">
+            The servant bowed. 
+        </mstts:express-as>
+    </voice>
+    <voice name="en-GB-OllieMultilingualNeural">
+        <mstts:express-as style="default" styledegree="2">
+            “From this moment forward, every bite, every drop, every indulgence shall be purchased with a soul coin.”
+            <break time="450ms"/>
+        </mstts:express-as>
+    </voice>
+	<voice name="zh-CN-XiaoxiaoMultilingualNeural">
+        <mstts:express-as style="story" styledegree="2">
+            Pepper choked on the last sip of her drink.
+        </mstts:express-as>
+    </voice>
+    <voice name="en-US-SaraNeural">
+        <mstts:express-as style="default" styledegree="2">
+            <prosody pitch="30%">
+                “A soul coin? For another plate of eggs?”
+				<break time="450ms"/>
+            </prosody>
+        </mstts:express-as>
+    </voice>
+    <voice name="zh-CN-XiaoxiaoMultilingualNeural">
+        <mstts:express-as style="story" styledegree="2">
+            The servant’s smile was polite, practiced, unyielding. 
+        </mstts:express-as>
+    </voice>
+    <voice name="en-GB-OllieMultilingualNeural">
+        <mstts:express-as style="default" styledegree="2">
+            “Such is the custom. Comforts, after all, are rarely free in Avernus.”
+			<break time="450ms"/>
+        </mstts:express-as>
+    </voice>
+	<voice name="zh-CN-XiaoxiaoMultilingualNeural">
+        <mstts:express-as style="story" styledegree="2">
+            Nimble let out a bitter laugh, pushing his chair back.
+        </mstts:express-as>
+    </voice>
+    <voice name="en-US-Steffan:DragonHDLatestNeural">
+        <mstts:express-as style="default" styledegree="2">
+            “And here I almost believed generosity could survive in Hell.”
+			<break time="450ms"/>
+        </mstts:express-as>
+    </voice>
+    <voice name="zh-CN-XiaoxiaoMultilingualNeural">
+        <mstts:express-as style="story" styledegree="2">
+            Lyria tilted her head, smirking despite herself. 
+        </mstts:express-as>
+    </voice>
+    <voice name="en-US-Ava3:DragonHDLatestNeural">
+        <mstts:express-as style="default" styledegree="2">
+            “No, only commerce.”
+			<break time="450ms"/>
+        </mstts:express-as>
+    </voice>
+    <voice name="zh-CN-XiaoxiaoMultilingualNeural">
+        <mstts:express-as style="story" styledegree="2">
+            The companions exchanged looks. None of them were eager to spend such currency lightly.
+            <break time="450ms"/>
+            It was Nimble who finally broke the silence, his voice quiet but edged with purpose.
+        </mstts:express-as>
+    </voice>
+    <voice name="en-US-Steffan:DragonHDLatestNeural">
+        <mstts:express-as style="default" styledegree="2">
+            “Is there anywhere in the bazaar that takes material plane coin?”
+			<break time="450ms"/>
+        </mstts:express-as>
+    </voice>
+	<voice name="zh-CN-XiaoxiaoMultilingualNeural">
+        <mstts:express-as style="story" styledegree="2">
+            The servant inclined his head and gestured in a direction, toward something they could not see through the fabrics. 
+        </mstts:express-as>
+    </voice>
+    <voice name="en-GB-OllieMultilingualNeural">
+        <mstts:express-as style="default" styledegree="2">
+            “You’ll find what you seek at Firesnake Forge. It stands beside the bazaar’s entrance<break time="300ms"/>a workshop dealing in mortal goods, for mortal currency.”
             <break time="450ms"/>
         </mstts:express-as>
     </voice>
