@@ -53,7 +53,7 @@ class Program
 
         var batches = new List<string>();
         var startIndex = 0;
-        var batchLength = 2000;
+        var batchLength = 5000;
         var breakAt = "\r\n";
 
         while (startIndex < textContent.Length)
