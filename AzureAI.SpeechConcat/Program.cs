@@ -24,6 +24,7 @@ class Program
         string? outputAudioFileName = configuration.GetConfigurationValue<string?>("OutputAudioFileName");
 
         bool? saveSsml = configuration.GetConfigurationValue<bool?>("SaveSsml");
+        bool? combineSsml = configuration.GetConfigurationValue<bool?>("CombineSsml");
         bool? useExistingSsml = configuration.GetConfigurationValue<bool?>("UseExistingSsml");
         bool? useBatchSynthesis = configuration.GetConfigurationValue<bool?>("UseBatchSynthesis");
 
@@ -31,7 +32,9 @@ class Program
 
         if (useExistingSsml == false || GetBatches(directoryPath).Count == 0)
         {
-            await PrepareBatches(openAIEndpoint, openAIKey, openAIDeployment, systemMessageFilePath, inputTextFilePath, saveSsml);        
+            await PrepareBatches(openAIEndpoint, openAIKey, openAIDeployment, systemMessageFilePath, inputTextFilePath, saveSsml, combineSsml);
+            if (combineSsml == true)
+                ConcatSsmlFiles(directoryPath);
             Console.WriteLine("SSML files have now been generated and saved on disk. You can now make modifications to them if desired. Press any key to proceed with speech synthesis.");
             Console.ReadKey();
         }
@@ -45,7 +48,7 @@ class Program
         ConcatAudioFiles(audioFilePaths, directoryPath, $"{outputAudioFileName ?? "result"}.wav");
     }    
 
-    private static async Task PrepareBatches(string openAiEndpoint, string openAiKey, string openAiDeployment, string systemMessageFilePath, string inputTextFilePath, bool? saveSsml)
+    private static async Task PrepareBatches(string openAiEndpoint, string openAiKey, string openAiDeployment, string systemMessageFilePath, string inputTextFilePath, bool? saveSsml, bool? combineSsml)
     {
         var openAiService = new OpenAIService(openAiEndpoint, openAiKey, openAiDeployment, File.ReadAllText(systemMessageFilePath));
 
@@ -53,7 +56,7 @@ class Program
 
         var batches = new List<string>();
         var startIndex = 0;
-        var batchLength = 5000;
+        var batchLength = 5000; // Batch size for SSML generation
         var breakAt = "\r\n";
 
         while (startIndex < textContent.Length)
@@ -85,6 +88,26 @@ class Program
         }
 
         return batches;
+    }
+
+    private static void ConcatSsmlFiles(string directoryPath)
+    {
+        var openingTag = "<speak xmlns=\"http://www.w3.org/2001/10/synthesis\" xmlns:mstts=\"https://www.w3.org/2001/mstts\" version=\"1.0\" xml:lang=\"en-UK\">";
+        var closingTag = "</speak>";
+
+        var concatResult = string.Empty;
+
+        var files = Directory.GetFiles(directoryPath, "*.ssml").OrderBy(f => int.Parse(Path.GetFileNameWithoutExtension(f))).ToArray();
+
+        foreach (var file in files)
+        {
+            concatResult += File.ReadAllText(file).Replace(openingTag, string.Empty).Replace(closingTag, string.Empty);
+            File.Delete(file);
+        }           
+
+        concatResult = $"{openingTag}{concatResult}{closingTag}";
+
+        File.WriteAllText($"{directoryPath}\\{files.Length}.ssml", concatResult);
     }
 
     private static void ConcatAudioFiles(IEnumerable<string> inputFilePaths, string directoryPath, string outputFileName)
