@@ -45,7 +45,7 @@
          - Clonk: en-US-GuyNeural (apply a prosody pitch of 20%)
          - Barnabas: en-US-Adam:DragonHDLatestNeural
          - Ravens: en-US-JasonNeural (apply a prosody pitch of 20%)
-         - Devils: en-US-JasonNeural (apply a prosody pitch of -25%)
+         - Devil: en-US-JasonNeural (apply a prosody pitch of -25%)
          - Raphael: en-US-Adam:DragonHDLatestNeural
          - Alaric: en-US-Brian:DragonHDLatestNeural
          - Mantus: en-US-DavisNeural
@@ -63,6 +63,9 @@
          - Hobgoblin: en-US-DavisNeural (apply prosody pitch of -10%; apply 'unfriendly' speaking style)
          - Skids (salamander): en-US-GuyNeural (apply prosody pitch of -15%; apply 'friendly' speaking style)
          - Glafnar (cloud giant): en-US-DavisNeural (apply a prosody pitch of -10%)
+         - Voice within the map: en-US-Adam:DragonHDLatestNeural
+         - Mordenkainen: en-US-OnyxTurboMultilingualNeural
+         - Eliza (erinyes): en-US-Phoebe:DragonHDLatestNeural
    - IMPORTANT: DO NOT generate any dialogue or character-specific SSML blocks if the input text does not contain exact quotation marks.
 
 4. Dialogue Customization and Emotion Handling
@@ -784,6 +787,100 @@ The servant inclined his head and gestured in a direction, toward something they
         <mstts:express-as style="default" styledegree="2">
             “You’ll find what you seek at Firesnake Forge. It stands beside the bazaar’s entrance<break time="300ms"/>a workshop dealing in mortal goods, for mortal currency.”
             <break time="450ms"/>
+        </mstts:express-as>
+    </voice>
+    ```
+- **Input:** Nemo narrowed his eyes, voice low. “We should approach with care.”
+- **Expected output:**
+    ```
+    <voice name="zh-CN-XiaoxiaoMultilingualNeural">
+        <mstts:express-as style="story" styledegree="2">
+			Nemo narrowed his eyes, voice low.
+        </mstts:express-as>
+    </voice>
+    <voice name="en-US-Andrew:DragonHDLatestNeural">
+        <mstts:express-as style="default" styledegree="2">
+            “We should approach with care.”
+			<break time="450ms"/>
+        </mstts:express-as>
+    </voice>
+    ```
+- - **Input:** One devil, lean and scarred, inclined his head. “Mordenkainen always hungers for infernal goods. Bring him what he craves, and he pays well.”
+Another devil continued, his voice tinged with slight irritation. “We wait for him to appear upon the balcony. Hopefully, his needs are great tonight; there are many present who wish to fulfill his desires.”
+“And do not think to quarrel here. The mage hates disorder. If blades are drawn, he’ll release a storm from above, banishing us from this place,” the first added, with a glance toward the tower’s blazing crown.
+Lyria’s eyes narrowed, her tone casual as she pressed further. “And if mortals or even celestials were to join you to answer to his whims? Would that matter to you?”
+The devils exchanged shrugs and low chuckles. “We care only for our bargains,” one replied. “Mortals, angels, fiends—none of that matters. Only the mage’s will.”
+- **Expected output:**
+    ```
+    <voice name="zh-CN-XiaoxiaoMultilingualNeural">
+        <mstts:express-as style="story" styledegree="2">
+            One devil, lean and scarred, inclined his head.
+        </mstts:express-as>
+    </voice>
+    <voice name="en-US-JasonNeural">
+        <mstts:express-as style="default" styledegree="2">
+			<prosody pitch="-25%">
+				“Mordenkainen always hungers for infernal goods. Bring him what he craves, and he pays well.”
+				<break time="450ms"/>
+			</prosody>
+        </mstts:express-as>
+    </voice>
+	    <voice name="zh-CN-XiaoxiaoMultilingualNeural">
+        <mstts:express-as style="story" styledegree="2">
+            Another devil continued, his voice tinged with slight irritation. 
+        </mstts:express-as>
+    </voice>
+    <voice name="en-US-JasonNeural">
+        <mstts:express-as style="irritation" styledegree="2">
+			<prosody pitch="-25%">
+				“We wait for him to appear upon the balcony. Hopefully, his needs are great tonight<break time="300ms"/>there are many present who wish to fulfill his desires.”
+				<break time="450ms"/>
+			</prosody>
+        </mstts:express-as>
+    </voice>
+    <voice name="en-US-JasonNeural">
+        <mstts:express-as style="default" styledegree="2">
+			<prosody pitch="-25%">
+				“And do not think to quarrel here. The mage hates disorder. If blades are drawn, he’ll release a storm from above, banishing us from this place,”
+			</prosody>
+        </mstts:express-as>
+    </voice>
+    <voice name="zh-CN-XiaoxiaoMultilingualNeural">
+        <mstts:express-as style="story" styledegree="2">
+            the first added, with a glance toward the tower’s blazing crown.
+            <break time="450ms"/>
+			Lyria’s eyes narrowed, her tone casual as she pressed further.
+        </mstts:express-as>
+    </voice>
+    <voice name="en-US-Ava3:DragonHDLatestNeural">
+        <mstts:express-as style="default" styledegree="2">
+            “And if mortals or even celestials would join you to answer to his whims? Would that matter to you?”
+			<break time="450ms"/>
+        </mstts:express-as>
+    </voice>
+    <voice name="zh-CN-XiaoxiaoMultilingualNeural">
+        <mstts:express-as style="story" styledegree="2">
+            The devils exchanged shrugs and low chuckles. 
+        </mstts:express-as>
+    </voice>
+    <voice name="en-US-JasonNeural">
+        <mstts:express-as style="default" styledegree="2">
+			<prosody pitch="-25%">
+				“We care only for our bargains,”
+			</prosody>
+        </mstts:express-as>
+    </voice>
+    <voice name="zh-CN-XiaoxiaoMultilingualNeural">
+        <mstts:express-as style="story" styledegree="2">
+            one replied.
+        </mstts:express-as>
+    </voice>
+    <voice name="en-US-JasonNeural">
+        <mstts:express-as style="default" styledegree="2">
+			<prosody pitch="-25%">
+				“Mortals, angels, fiends<break time="300ms"/>none of that matters. Only the mage’s will.”
+				<break time="450ms"/>
+			</prosody>
         </mstts:express-as>
     </voice>
     ```
