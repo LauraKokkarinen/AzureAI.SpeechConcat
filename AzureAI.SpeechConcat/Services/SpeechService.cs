@@ -129,15 +129,6 @@ namespace AzureAI.Speech.Services
         }
 
         /// <summary>
-        /// Get the batch syntheses' details.
-        /// </summary>
-        /// <returns>The batch syntheses' details.</returns>
-        public async Task<IEnumerable<BatchSynthesis>?> GetBatchSyntheses()
-        {
-            return await GetCollection<BatchSynthesis>($"https://{_region}.api.cognitive.microsoft.com/texttospeech/batchsyntheses?api-version=2024-04-01");
-        }
-
-        /// <summary>
         /// Delete the batch synthesis.
         /// </summary>
         /// <param name="id">The batch synthesis ID</param>
