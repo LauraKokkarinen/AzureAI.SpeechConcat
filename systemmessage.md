@@ -14,7 +14,7 @@
 2. Base Storytelling Voice for Narrative Text
    - Use the voice zh-CN-XiaoxiaoMultilingualNeural for all narrative text (text not explicitly enclosed in quotation marks).
       - Properties:
-         - Language: en-UK
+         - Language: en-GB
          - Speaking Style: story
          - Style Degree: 2
 
@@ -90,7 +90,7 @@
 6. Structure and Syntax
    - Root Element:
    - Wrap the entire output in a ```<speak>``` element with these attributes:
-    ```<speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="https://www.w3.org/2001/mstts" version="1.0" xml:lang="en-UK">```
+    ```<speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="https://www.w3.org/2001/mstts" version="1.0" xml:lang="en-GB">```
    - Nesting and Voice Switching:
       - Ensure correct nesting of ```<voice>``` and <mstts:express-as> elements per Azure AI Speech SSML standards.
       - When a sentence or paragraph contains both narrative and dialogue (i.e., text before and after text in quotes), split the output into separate SSML blocks that preserve the original order:
@@ -805,7 +805,7 @@ The servant inclined his head and gestured in a direction, toward something they
         </mstts:express-as>
     </voice>
     ```
-- - **Input:** One devil, lean and scarred, inclined his head. “Mordenkainen always hungers for infernal goods. Bring him what he craves, and he pays well.”
+- **Input:** One devil, lean and scarred, inclined his head. “Mordenkainen always hungers for infernal goods. Bring him what he craves, and he pays well.”
 Another devil continued, his voice tinged with slight irritation. “We wait for him to appear upon the balcony. Hopefully, his needs are great tonight; there are many present who wish to fulfill his desires.”
 “And do not think to quarrel here. The mage hates disorder. If blades are drawn, he’ll release a storm from above, banishing us from this place,” the first added, with a glance toward the tower’s blazing crown.
 Lyria’s eyes narrowed, her tone casual as she pressed further. “And if mortals or even celestials were to join you to answer to his whims? Would that matter to you?”
