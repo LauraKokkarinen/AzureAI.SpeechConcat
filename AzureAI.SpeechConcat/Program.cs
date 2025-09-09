@@ -42,8 +42,8 @@ class Program
         var batches = GetBatches(directoryPath);
 
         var audioFilePaths = useBatchSynthesis == true ?
-            await ConcatBatchSynthesizer.Run(speechKey, speechRegion, batches, directoryPath) :
-            await ConcatSpeechSynthesizer.Run(speechKey, speechRegion, batches, directoryPath);
+            await ConcatBatchSynthesizer.Run(speechKey, speechRegion, directoryPath, batches) :
+            await ConcatSpeechSynthesizer.Run(speechKey, speechRegion, directoryPath, batches);
 
         ConcatAudioFiles(audioFilePaths, directoryPath, $"{outputAudioFileName ?? "result"}.wav");
     }    
@@ -92,7 +92,7 @@ class Program
 
     private static void ConcatSsmlFiles(string directoryPath)
     {
-        var openingTag = "<speak xmlns=\"http://www.w3.org/2001/10/synthesis\" xmlns:mstts=\"https://www.w3.org/2001/mstts\" version=\"1.0\" xml:lang=\"en-UK\">";
+        var openingTag = "<speak xmlns=\"http://www.w3.org/2001/10/synthesis\" xmlns:mstts=\"https://www.w3.org/2001/mstts\" version=\"1.0\" xml:lang=\"en-US\">";
         var closingTag = "</speak>";
 
         var concatResult = string.Empty;

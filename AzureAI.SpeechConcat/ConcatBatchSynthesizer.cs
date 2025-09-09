@@ -7,7 +7,7 @@ namespace AzureAI.Speech
 {
     internal static class ConcatBatchSynthesizer
     {
-        internal static async Task<List<string>> Run(string speechKey, string speechRegion, List<string> batches, string directoryPath)
+        internal static async Task<List<string>> Run(string speechKey, string speechRegion, string directoryPath, List<string> batches)
         {
             var speechService = new SpeechService(new HttpService(), speechRegion, speechKey);
 
