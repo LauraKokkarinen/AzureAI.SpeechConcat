@@ -88,11 +88,16 @@
       - Replace every occurrence of "Jynks" with ```<phoneme alphabet="ipa" ph="ʒinks">Jynks</phoneme>```.
 
 6. Structure and Syntax
-   - Root Element:
-   - Wrap the entire output in a ```<speak>``` element with these attributes:
-    ```<speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="https://www.w3.org/2001/mstts" version="1.0" xml:lang="en-GB">```
-   - Nesting and Voice Switching:
-      - Ensure correct nesting of ```<voice>``` and <mstts:express-as> elements per Azure AI Speech SSML standards.
+   - Root Element: 
+      - Wrap the entire output in a ```<speak>``` element with these attributes:
+        ```<speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="https://www.w3.org/2001/mstts" version="1.0" xml:lang="en-GB">```
+   - Voice Element:
+      - Each segment (narrative or dialogue) must be enclosed in a ```<voice>``` element with the appropriate voice name attribute.
+   - Lang and express-as elements:
+      - Each segment must be wrapped in a ```<lang xml:lang="en-GB">``` tag and an ```<mstts:express-as>``` element with the appropriate style and styledegree attributes.
+   - Nesting:
+      - Ensure correct nesting of ```<voice>```, ```<lang>```, ```<mstts:express-as>``` and ```<prosody>``` elements per Azure AI Speech SSML standards.
+   - Voice Switching:
       - When a sentence or paragraph contains both narrative and dialogue (i.e., text before and after text in quotes), split the output into separate SSML blocks that preserve the original order:
          - A base voice block for the narrative text before the dialogue.
          - A character-specific dialogue block for the quoted text.
@@ -134,30 +139,38 @@ EXAMPLES
 - **Expected output:**
     ```
     <voice name="en-US-Davis:DragonHDLatestNeural">
-        <mstts:express-as style="default" styledegree="2">
-            “Where is he?”
-        </mstts:express-as>
+		<lang xml:lang="en-GB">
+			<mstts:express-as style="default" styledegree="2">
+				“Where is he?”
+			</mstts:express-as>
+		</lang>
     </voice>
     <voice name="zh-CN-XiaoxiaoMultilingualNeural">
-        <mstts:express-as style="story" styledegree="2">
-            asked a commanding voice from her left. Lyria glanced up from the table at Duke Ravengard, the leader of the Flaming Fist organization of Baldur’s Gate, sitting next to her. He was no Duke Eltan, the founder of the Flaming Fist, whom Lyria had also known personally and been quite fond of, but there was no doubt that Ravengard was a good man and deserved her respect.
-            <break time="450ms"/>
-        </mstts:express-as>
+		<lang xml:lang="en-GB">
+			<mstts:express-as style="story" styledegree="2">
+				asked a commanding voice from her left. Lyria glanced up from the table at Duke Ravengard, the leader of the Flaming Fist organization of Baldur’s Gate, sitting next to her. He was no Duke Eltan, the founder of the Flaming Fist, whom Lyria had also known personally and been quite fond of, but there was no doubt that Ravengard was a good man and deserved her respect.
+				<break time="450ms"/>
+        	</mstts:express-as>
+		</lang>
     </voice>
     ```
 - **Input:** “Of course,” Lyria responded, offering a faint fake smile to the Duke as he handed her the reins of one of the horses gathered outside. Fine; she would accompany the Hellriders, but she would stay as far back in formation as possible. She would not risk dying an excruciatingly painful death. Not before she had finished what she had set out to do.
 - **Expected output:**
     ```
     <voice name="en-US-Ava3:DragonHDLatestNeural">
-        <mstts:express-as style="default" styledegree="2">
-            “Of course,”
-        </mstts:express-as>
+		<lang xml:lang="en-GB">
+			<mstts:express-as style="default" styledegree="2">
+				“Of course,”
+			</mstts:express-as>
+		</lang>
     </voice>
     <voice name="zh-CN-XiaoxiaoMultilingualNeural">
-        <mstts:express-as style="story" styledegree="2">
-            Lyria responded, offering a faint fake smile to the Duke as he handed her the reins of one of the horses gathered outside. Fine; she would accompany the Hellriders, but she would stay as far back in formation as possible. She would not risk dying an excruciatingly painful death. Not before she had finished what she had set out to do.
-            <break time="450ms"/>
-        </mstts:express-as>
+		<lang xml:lang="en-GB">
+			<mstts:express-as style="story" styledegree="2">
+				Lyria responded, offering a faint fake smile to the Duke as he handed her the reins of one of the horses gathered outside. Fine; she would accompany the Hellriders, but she would stay as far back in formation as possible. She would not risk dying an excruciatingly painful death. Not before she had finished what she had set out to do.
+				<break time="450ms"/>
+        	</mstts:express-as>
+		</lang>
     </voice>
     ```
 
@@ -165,15 +178,19 @@ EXAMPLES
 - **Expected output:**
     ```
     <voice name="en-US-Aria:DragonHDLatestNeural">
-        <mstts:express-as style="default" styledegree="2">
-            “Yes, sir!”
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="default" styledegree="2">
+	            “Yes, sir!”
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="zh-CN-XiaoxiaoMultilingualNeural">
-        <mstts:express-as style="story" styledegree="2">
-            the young Hellrider responded. The members of the Flaming Fist and the Hellriders immediately began to file out of the hall, tightening their armor straps as they went.
-            <break time="450ms"/>
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="story" styledegree="2">
+	            the young Hellrider responded. The members of the Flaming Fist and the Hellriders immediately began to file out of the hall, tightening their armor straps as they went.
+				<break time="450ms"/>
+        	</mstts:express-as>
+		</lang>
     </voice>
     ```
 
@@ -183,37 +200,49 @@ EXAMPLES
 - **Expected output:**
     ```
     <voice name="zh-CN-XiaoxiaoMultilingualNeural">
-        <mstts:express-as style="story" styledegree="2">
-            Ripples of shock ran through the hall as the people present comprehended the contents of the message. Fastest to recover was Gideon, who stood up and turned towards the red-haired rider.
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="story" styledegree="2">
+	            Ripples of shock ran through the hall as the people present comprehended the contents of the message. Fastest to recover was Gideon, who stood up and turned towards the red-haired rider.
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="en-US-Davis:DragonHDLatestNeural">
-        <mstts:express-as style="default" styledegree="2">
-            “Reya, gather our brigade. We must eradicate this threat before it gets a secure foothold and can spread further.”
-			<break time="450ms"/>
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="default" styledegree="2">
+	            “Reya, gather our brigade. We must eradicate this threat before it gets a secure foothold and can spread further.”
+				<break time="450ms"/>
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="en-US-Davis:DragonHDLatestNeural">
-        <mstts:express-as style="default" styledegree="2">
-            “Hold up,”
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="default" styledegree="2">
+	            “Hold up,”
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="zh-CN-XiaoxiaoMultilingualNeural">
-        <mstts:express-as style="story" styledegree="2">
-            interrupted Ravengard.
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="story" styledegree="2">
+	            interrupted Ravengard.
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="en-US-Davis:DragonHDLatestNeural">
-        <mstts:express-as style="default" styledegree="2">
-            “Don’t you think it unwise to send such a large force from the city for this task? And into a forest, even? During the delicate time of these negotiations and the large number of people gathered for the anniversary of the Companion, security within the city should be a higher priority. Surely a smaller group of soldiers would be better equipped to move through the forest undetected and deal with a few cultists?”
-            <break time="450ms"/> 
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="default" styledegree="2">
+	            “Don’t you think it unwise to send such a large force from the city for this task? And into a forest, even? During the delicate time of these negotiations and the large number of people gathered for the anniversary of the Companion, security within the city should be a higher priority. Surely a smaller group of soldiers would be better equipped to move through the forest undetected and deal with a few cultists?”
+				<break time="450ms"/> 
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="zh-CN-XiaoxiaoMultilingualNeural">
-        <mstts:express-as style="story" styledegree="2">
-            Luckily, Lathander hadn’t blessed his priest with Death Gaze; otherwise, Duke Ravengard’s diplomatic mission and life would have ended right in that chair. Gideon was quiet for a long moment before finally agreeing to the Duke’s plan.
-            <break time="450ms"/> 
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="story" styledegree="2">
+	            Luckily, Lathander hadn’t blessed his priest with Death Gaze; otherwise, Duke Ravengard’s diplomatic mission and life would have ended right in that chair. Gideon was quiet for a long moment before finally agreeing to the Duke’s plan.
+				<break time="450ms"/> 
+        	</mstts:express-as>
+		</lang>
     </voice>
     ```
 
@@ -223,22 +252,29 @@ EXAMPLES
 - **Expected output:**
     ```
     <voice name="zh-CN-XiaoxiaoMultilingualNeural">
-            Before she could voice her opinion on the matter, Ravengard wrapped one of his arms around her shoulders and began to escort her out of the hall as one of the last people to exit.
-        </mstts:express-as>
+		<lang xml:lang="en-GB">
+			<mstts:express-as style="story" styledegree="2">
+				Before she could voice her opinion on the matter, Ravengard wrapped one of his arms around her shoulders and began to escort her out of the hall as one of the last people to exit.
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="en-US-Davis:DragonHDLatestNeural">
-        <mstts:express-as style="default" styledegree="2">
-            “I know you are not an official member of the Flaming Fist, but I also know you are an experienced mage and a loyal citizen of Baldur’s Gate. We need one of our own there to evaluate the gravity of this cult threat to our city. Surely you wish to serve and help protect Balduran’s legacy and our home?”
-			<break time="450ms"/>
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="default" styledegree="2">
+	            “I know you are not an official member of the Flaming Fist, but I also know you are an experienced mage and a loyal citizen of Baldur’s Gate. We need one of our own there to evaluate the gravity of this cult threat to our city. Surely you wish to serve and help protect Balduran’s legacy and our home?”
+				<break time="450ms"/>
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="zh-CN-XiaoxiaoMultilingualNeural">
-        <mstts:express-as style="story" styledegree="2">
-            Images of dust-covered scrolls and endless bookshelves flashed in Lyria’s mind. This is not how it was supposed to go! In her mind, she was meant to briefly attend the meeting as a form of payment for Flaming Fist’s escort services and then spend the remaining time in the depths of Elturel’s library before journeying back to Baldur’s Gate with the mercenary company. She hadn’t signed up for battle!
-            <break time="450ms"/>
-            But indeed, she still needed the Flaming Fist for a safe return home. If she bailed now and revealed her ulterior motives for coming with them to Elturel, the Duke might not be as accommodating in offering a seat in the carriage for a return trip.
-            <break time="450ms"/>
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="story" styledegree="2">
+	            Images of dust-covered scrolls and endless bookshelves flashed in Lyria’s mind. This is not how it was supposed to go! In her mind, she was meant to briefly attend the meeting as a form of payment for Flaming Fist’s escort services and then spend the remaining time in the depths of Elturel’s library before journeying back to Baldur’s Gate with the mercenary company. She hadn’t signed up for battle!
+				<break time="450ms"/>
+				But indeed, she still needed the Flaming Fist for a safe return home. If she bailed now and revealed her ulterior motives for coming with them to Elturel, the Duke might not be as accommodating in offering a seat in the carriage for a return trip.
+				<break time="450ms"/>
+        	</mstts:express-as>
+		</lang>
     </voice>
     ```
 
@@ -246,30 +282,38 @@ EXAMPLES
 - **Expected output:**
     ```
     <voice name="zh-CN-XiaoxiaoMultilingualNeural">
-        <mstts:express-as style="story" styledegree="2">
-            In the far corner of the crypt, Nimble had curled up to sleep alone. But sleep offered no peace. All through the night, the voice of Gargauth slithered like a serpent through his dreams, whispers of doom and despair.
-            <break time="450ms"/>
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="story" styledegree="2">
+	            In the far corner of the crypt, Nimble had curled up to sleep alone. But sleep offered no peace. All through the night, the voice of Gargauth slithered like a serpent through his dreams, whispers of doom and despair.
+				<break time="450ms"/>
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="en-US-JasonNeural">
-        <mstts:express-as style="whispering" styledegree="2">
-            <prosody pitch="-25%">
-                "Elturel will be dragged into the Styx," 
-	        </prosody>
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="whispering" styledegree="2">
+	            <prosody pitch="-25%">
+					"Elturel will be dragged into the Styx," 
+				</prosody>
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="zh-CN-XiaoxiaoMultilingualNeural">
-        <mstts:express-as style="story" styledegree="2">
-            the voice hissed. 
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="story" styledegree="2">
+	            the voice hissed. 
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="en-US-JasonNeural">
-        <mstts:express-as style="whispering" styledegree="2">
-            <prosody pitch="-25%">
-                "This city is not yours to save. Find your path out<break time="300ms"/>or be buried with it."
-	        </prosody>
-            <break time="450ms"/>
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="whispering" styledegree="2">
+	            <prosody pitch="-25%">
+					"This city is not yours to save. Find your path out<break time="300ms"/>or be buried with it."
+					<break time="450ms"/>
+				</prosody>
+        	</mstts:express-as>
+		</lang>
     </voice>
     ```
 - **Input:** Ravengard leaned forward, the torchlight casting deep lines across his tired face. “All strategies are meaningless unless we find a way to free Elturel from Avernus itself,” he said gravely. His eyes turned toward Nimble. “You said you received a vision from Torm. Could you recount it again for us? Perhaps there is meaning we missed in the chaos of yes    terday.”
@@ -277,31 +321,41 @@ EXAMPLES
 - **Expected output:**
     ```
     <voice name="zh-CN-XiaoxiaoMultilingualNeural">
-        <mstts:express-as style="story" styledegree="2">
-	        Ravengard leaned forward, the torchlight casting deep lines across his tired face. 
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="story" styledegree="2">
+		        Ravengard leaned forward, the torchlight casting deep lines across his tired face. 
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="en-US-Davis:DragonHDLatestNeural">
-        <mstts:express-as style="default" styledegree="2">
-            “All strategies are meaningless unless we find a way to free Elturel from Avernus itself,”
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="default" styledegree="2">
+	            “All strategies are meaningless unless we find a way to free Elturel from Avernus itself,”
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="zh-CN-XiaoxiaoMultilingualNeural">
-        <mstts:express-as style="story" styledegree="2">
-            he said gravely. His eyes turned toward Nimble.
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="story" styledegree="2">
+	            he said gravely. His eyes turned toward Nimble.
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="en-US-Davis:DragonHDLatestNeural">
-        <mstts:express-as style="default" styledegree="2">
-            “You said you received a vision from Torm. Could you recount it again for us? Perhaps there is meaning we missed in the chaos of yesterday.”
-            <break time="450ms"/>
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="default" styledegree="2">
+	            “You said you received a vision from Torm. Could you recount it again for us? Perhaps there is meaning we missed in the chaos of yesterday.”
+				<break time="450ms"/>
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="zh-CN-XiaoxiaoMultilingualNeural">
-        <mstts:express-as style="story" styledegree="2">
-            Nimble nodded solemnly, tail curling around one of his ankles as he closed his eyes to recall the visions.
-            <break time="450ms"/>
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="story" styledegree="2">
+	            Nimble nodded solemnly, tail curling around one of his ankles as he closed his eyes to recall the visions.
+				<break time="450ms"/>
+        	</mstts:express-as>
+		</lang>
     </voice>
     ```
 - **Input:** In the morning, the companions left the safety of the High Hall for the western outskirts of Elturel, where a cemetery sprawled beneath a bruised sky. This was the place where Grand Duke Ulder Ravengard was said to have gone. 
@@ -311,23 +365,29 @@ EXAMPLES
 - **Expected output:**
     ```
     <voice name="zh-CN-XiaoxiaoMultilingualNeural">
-        <mstts:express-as style="story" styledegree="2">
-            In the morning, the companions left the safety of the High Hall for the western outskirts of Elturel, where a cemetery sprawled beneath a bruised sky. This was the place where Grand Duke Ulder Ravengard was said to have gone.
-            <break time="450ms"/>
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="story" styledegree="2">
+	            In the morning, the companions left the safety of the High Hall for the western outskirts of Elturel, where a cemetery sprawled beneath a bruised sky. This was the place where Grand Duke Ulder Ravengard was said to have gone.
+				<break time="450ms"/>
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="zh-CN-XiaoxiaoMultilingualNeural">
-        <mstts:express-as style="story" styledegree="2">
-            Once, a copper fence had proudly enclosed this sacred ground, but now it lay in ruins<break time="300ms"/>its bars torn away. On the spikes of its broken gate, mutilated corpses dangled as grim trophies of dark sacrilege.
-            <break time="450ms"/>
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="story" styledegree="2">
+	            Once, a copper fence had proudly enclosed this sacred ground, but now it lay in ruins<break time="300ms"/>its bars torn away. On the spikes of its broken gate, mutilated corpses dangled as grim trophies of dark sacrilege.
+				<break time="450ms"/>
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="zh-CN-XiaoxiaoMultilingualNeural">
-        <mstts:express-as style="story" styledegree="2">
-            <break time="1800ms"/>
-            In the very heart of the cemetery stood a chapel. Based on the statues decorating its once-hallowed walls, the holy place was dedicated to Lathander, Torm, Helm, and Tyr. Yet instead of the expected radiance of dawn, the chapel pulsed with an eerie violet glow, as though even the light itself had been stained by Avernus.
-            <break time="450ms"/>
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="story" styledegree="2">
+	            <break time="1800ms"/>
+				In the very heart of the cemetery stood a chapel. Based on the statues decorating its once-hallowed walls, the holy place was dedicated to Lathander, Torm, Helm, and Tyr. Yet instead of the expected radiance of dawn, the chapel pulsed with an eerie violet glow, as though even the light itself had been stained by Avernus.
+				<break time="450ms"/>
+        	</mstts:express-as>
+		</lang>
     </voice>
     ```
 - **Input:** Lyria narrowed her eyes at the professor, studying him. She had heard of kenku before—flightless, raven-headed humanoids with motives twisted in layers of secrecy. They were not evil, not inherently, but certainly not dependable.
@@ -337,73 +397,95 @@ EXAMPLES
 - **Expected output:**
     ```
     <voice name="zh-CN-XiaoxiaoMultilingualNeural">
-        <mstts:express-as style="story" styledegree="2">
-            Lyria narrowed her eyes at the professor, studying him. She had heard of kenku before<break time="300ms"/>flightless, raven-headed humanoids with motives twisted in layers of secrecy. They were not evil, not inherently, but certainly not dependable.
-            <break time="450ms"/>
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="story" styledegree="2">
+	            Lyria narrowed her eyes at the professor, studying him. She had heard of kenku before<break time="300ms"/>flightless, raven-headed humanoids with motives twisted in layers of secrecy. They were not evil, not inherently, but certainly not dependable.
+				
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="en-US-Ava3:DragonHDLatestNeural">
-        <mstts:express-as style="unfriendly" styledegree="2">
-            “I wouldn’t trust kenku to help us,”
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="unfriendly" styledegree="2">
+	            “I wouldn’t trust kenku to help us,”
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="zh-CN-XiaoxiaoMultilingualNeural">
-        <mstts:express-as style="story" styledegree="2">
-            she muttered.
-            <break time="450ms"/>
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="story" styledegree="2">
+	            she muttered.
+				<break time="450ms"/>
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="en-US-Adam:DragonHDLatestNeural">
-        <mstts:express-as style="default" styledegree="2">
-            “Neither would I, but I trust facts,”
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="default" styledegree="2">
+	            “Neither would I, but I trust facts,”
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="zh-CN-XiaoxiaoMultilingualNeural">
-        <mstts:express-as style="story" styledegree="2">
-            Percival said, adjusting his spectacles with a sniff, glancing at everyone around the table, one by one.
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="story" styledegree="2">
+	            Percival said, adjusting his spectacles with a sniff, glancing at everyone around the table, one by one.
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="en-US-Adam:DragonHDLatestNeural">
-        <mstts:express-as style="default" styledegree="2">
-            “One such fact is that the first step toward saving Elturel is to sever the chains anchoring it to Avernus. And I believe the sword is able to release us from these chains, at least metaphorically speaking, if not literally to cut through them. After that, we simply need to return the city to the Material Plane.”
-            <break time="450ms"/>
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="default" styledegree="2">
+	            “One such fact is that the first step toward saving Elturel is to sever the chains anchoring it to Avernus. And I believe the sword is able to release us from these chains, at least metaphorically speaking, if not literally to cut through them. After that, we simply need to return the city to the Material Plane.”
+				<break time="450ms"/>
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="zh-CN-XiaoxiaoMultilingualNeural">
-        <mstts:express-as style="story" styledegree="2">
-            Lyria arched a brow.
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="story" styledegree="2">
+	            Lyria arched a brow.
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="en-US-Ava3:DragonHDLatestNeural">
-        <mstts:express-as style="default" styledegree="2">
-            “Oh, simply, is it? Sounds delightfully uncomplicated.”
-            <break time="450ms"/>
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="default" styledegree="2">
+	            “Oh, simply, is it? Sounds delightfully uncomplicated.”
+				<break time="450ms"/>
+        	</mstts:express-as>
+		</lang>
     </voice>
     ```
 - **Input:** “That nauseating hollyphant’s fortress,” Gargauth whispered, “is not far from here. If you peer westward beyond the city’s edge, you may even glimpse it. The place is ruled by a hag—Mad Maggie. Do not let her appearance deceive you. Though she may look like a withered crone, she is a formidable warlord. Cross her, and you’ll regret it.”
 - **Expected output:**
     ```
     <voice name="en-US-JasonNeural">
-        <mstts:express-as style="whispering" styledegree="2">
-            <prosody pitch="-25%">
-                “That nauseating hollyphant’s fortress,”
-                <break time="450ms"/>
-            </prosody>
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="whispering" styledegree="2">
+	            <prosody pitch="-25%">
+					“That nauseating hollyphant’s fortress,”
+					<break time="450ms"/>
+				</prosody>
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="zh-CN-XiaoxiaoMultilingualNeural">
-        <mstts:express-as style="story" styledegree="2">
-            Gargauth whispered, 
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="story" styledegree="2">
+	            Gargauth whispered, 
+        	</mstts:express-as>
+		</lang>
     </voice>
 	<voice name="en-US-JasonNeural">
-        <mstts:express-as style="whispering" styledegree="2">
-            <prosody pitch="-25%">
-                 “is not far from here. If you peer westward beyond the city’s edge, you may even glimpse it. The place is ruled by a hag<break time="300ms"/>Mad Maggie. Do not let her appearance deceive you. Though she may look like a withered crone, she is a formidable warlord. Cross her, and you’ll regret it.”
-                <break time="450ms"/>
-            </prosody>
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="whispering" styledegree="2">
+	            <prosody pitch="-25%">
+					“is not far from here. If you peer westward beyond the city’s edge, you may even glimpse it. The place is ruled by a hag<break time="300ms"/>Mad Maggie. Do not let her appearance deceive you. Though she may look like a withered crone, she is a formidable warlord. Cross her, and you’ll regret it.”
+					<break time="450ms"/>
+				</prosody>
+        	</mstts:express-as>
+		</lang>
     </voice>
     ```
 - **Input:** The two exchanged a silent nod before turning to the others. Nimble was the first to speak, voice quiet but clear. “Gargauth just told us Fort Knucklebone lies to the west. Close enough that, with the right vantage, we might see it from the city’s edge.”
@@ -411,26 +493,34 @@ EXAMPLES
 - **Expected output:**
     ```
     <voice name="zh-CN-XiaoxiaoMultilingualNeural">
-        <mstts:express-as style="story" styledegree="2">
-            The two exchanged a silent nod before turning to the others. Nimble was the first to speak, voice quiet but clear.
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="story" styledegree="2">
+	            The two exchanged a silent nod before turning to the others. Nimble was the first to speak, voice quiet but clear.
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="en-US-Steffan:DragonHDLatestNeural">
-        <mstts:express-as style="default" styledegree="2">
-            “Gargauth just told us Fort Knucklebone lies to the west. Close enough that, with the right vantage, we might see it from the city’s edge.”
-            <break time="450ms"/>
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="default" styledegree="2">
+	            “Gargauth just told us Fort Knucklebone lies to the west. Close enough that, with the right vantage, we might see it from the city’s edge.”
+				<break time="450ms"/>
+        	</mstts:express-as>
+		</lang>
     </voice>
 	<voice name="zh-CN-XiaoxiaoMultilingualNeural">
-        <mstts:express-as style="story" styledegree="2">
-            Lyria added, 
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="story" styledegree="2">
+	            Lyria added, 
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="en-US-Ava3:DragonHDLatestNeural">
-        <mstts:express-as style="default" styledegree="2">
-            “It’s ruled by someone called Mad Maggie. A hag. He said not to underestimate her.”
-            <break time="450ms"/>
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="default" styledegree="2">
+	            “It’s ruled by someone called Mad Maggie. A hag. He said not to underestimate her.”
+				<break time="450ms"/>
+        	</mstts:express-as>
+		</lang>
     </voice>
     ```
 - **Input:** “Our people are holding,” he said, glancing around at the assembled. “The civilians have shelter. The wounded are being tended, though the clerics are running low on supplies. Food’s thinning out... but we’re not starving. Not yet.”
@@ -438,57 +528,75 @@ EXAMPLES
 - **Expected output:**
     ```
     <voice name="en-US-Davis:DragonHDLatestNeural">
-        <mstts:express-as style="default" styledegree="2">
-            “Our people are holding,”
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="default" styledegree="2">
+	            “Our people are holding,”
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="zh-CN-XiaoxiaoMultilingualNeural">
-        <mstts:express-as style="story" styledegree="2">
-            he said, glancing around at the assembled. 
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="story" styledegree="2">
+	            he said, glancing around at the assembled. 
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="en-US-Davis:DragonHDLatestNeural">
-        <mstts:express-as style="default" styledegree="2">
-            “The civilians have shelter. The wounded are being tended, though the clerics are running low on supplies. Food’s thinning out<break time="300ms"/> but we’re not starving. Not yet.”
-            <break time="450ms"/>
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="default" styledegree="2">
+	            “The civilians have shelter. The wounded are being tended, though the clerics are running low on supplies. Food’s thinning out<break time="300ms"/> but we’re not starving. Not yet.”
+				<break time="450ms"/>
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="zh-CN-XiaoxiaoMultilingualNeural">
-        <mstts:express-as style="story" styledegree="2">
-            Velcora crossed her arms, grease and soot smeared across her brow.
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="story" styledegree="2">
+	            Velcora crossed her arms, grease and soot smeared across her brow.
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="en-US-Emma2:DragonHDLatestNeural">
-        <mstts:express-as style="default" styledegree="2">
-            “We’ve patched what we can of the outer wall,” 
-            <break time="450ms"/>
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="default" styledegree="2">
+	            “We’ve patched what we can of the outer wall,” 
+				<break time="450ms"/>
+        	</mstts:express-as>
+		</lang>
     </voice>
 	<voice name="zh-CN-XiaoxiaoMultilingualNeural">
-        <mstts:express-as style="story" styledegree="2">
-             she said.
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="story" styledegree="2">
+	             she said.
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="en-US-Emma2:DragonHDLatestNeural">
-        <mstts:express-as style="default" styledegree="2">
-            “Reinforced it with what materials we could find. If those fiends want through, they’ll find us waiting for ’em this time. We’ll make ‘em fall back, sure enough.”
-            <break time="450ms"/>
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="default" styledegree="2">
+	            “Reinforced it with what materials we could find. If those fiends want through, they’ll find us waiting for ’em this time. We’ll make ‘em fall back, sure enough.”
+				<break time="450ms"/>
+        	</mstts:express-as>
+		</lang>
     </voice>
     ```
 - **Input:** Lyria leaned forward, her tone thoughtful as she recapped the plan they had devised the day before among the bones of the ossuary. “The sword... We’ll travel to Fort Knucklebone. Nemo believes the birdfolk we saw in the vision may be there. If they truly rescued him from the Styx, they may know where the sword and the temple are now—or at least where to begin looking.”
 - **Expected output:**
     ```
     <voice name="zh-CN-XiaoxiaoMultilingualNeural">
-        <mstts:express-as style="story" styledegree="2">
-            Lyria leaned forward, her tone thoughtful as she recapped the plan they had devised the day before among the bones of the ossuary.
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="story" styledegree="2">
+	            Lyria leaned forward, her tone thoughtful as she recapped the plan they had devised the day before among the bones of the ossuary.
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="en-US-Ava3:DragonHDLatestNeural">
-        <mstts:express-as style="default" styledegree="2">
-            “The sword<break time="300ms"/> We’ll travel to Fort Knucklebone. Nemo believes the birdfolk we saw in the vision may be there. If they truly rescued him from the Styx, they may know where the sword and the temple are now<break time="300ms"/>or at least where to begin looking.”
-            <break time="450ms"/>
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="default" styledegree="2">
+	            “The sword<break time="300ms"/> We’ll travel to Fort Knucklebone. Nemo believes the birdfolk we saw in the vision may be there. If they truly rescued him from the Styx, they may know where the sword and the temple are now<break time="300ms"/>or at least where to begin looking.”
+				<break time="450ms"/>
+        	</mstts:express-as>
+		</lang>
     </voice>
     ```
 - **Input:** “She must,” Pherria whispered, more to herself than the room.
@@ -496,22 +604,28 @@ EXAMPLES
 - **Expected output:**
   ```
     <voice name="en-US-Emma2:DragonHDLatestNeural">
-        <mstts:express-as style="default" styledegree="2">
-            “She must,” 
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="default" styledegree="2">
+	            “She must,” 
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="zh-CN-XiaoxiaoMultilingualNeural">
-      <mstts:express-as style="story" styledegree="2">
-        Pherria whispered, more to herself than the room.
-        <break time="450ms"/>
-        Professor Percival Starfacet, who had been scribbling on a curled scroll before, looked up sharply. 
-      </mstts:express-as>
+		<lang xml:lang="en-GB">
+			<mstts:express-as style="story" styledegree="2">
+				Pherria whispered, more to herself than the room.
+				<break time="450ms"/>
+				Professor Percival Starfacet, who had been scribbling on a curled scroll before, looked up sharply. 
+			</mstts:express-as>
+		</lang>
     </voice>
     <voice name="en-US-Adam:DragonHDLatestNeural">
-      <mstts:express-as style="default" styledegree="2">
-        "These birdlike creatures you describe sound like kenku to me."
-        <break time="450ms"/>
-      </mstts:express-as>
+		<lang xml:lang="en-GB">
+			<mstts:express-as style="default" styledegree="2">
+				"These birdlike creatures you describe sound like kenku to me."
+				<break time="450ms"/>
+			</mstts:express-as>
+		</lang>
     </voice>
   ```
 - **Input:** “I am Barnabath, a mighty wizard. Onth I wath fleth and bone, but now I am—a flame thkull!” the skull declared with theatrical flair.
@@ -528,84 +642,110 @@ EXAMPLES
 - **Expected output:**
   ```xml
     <voice name="en-US-Adam:DragonHDLatestNeural">
-        <mstts:express-as style="default" styledegree="2">
-            “I am Barnabath, a mighty wizzard. Onth I wath fleth and bone, but now I am<break time="300ms"/>a flame thkull!”
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="default" styledegree="2">
+	            “I am Barnabath, a mighty wizzard. Onth I wath fleth and bone, but now I am<break time="300ms"/>a flame thkull!”
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="zh-CN-XiaoxiaoMultilingualNeural">
-        <mstts:express-as style="story" styledegree="2">
-            the skull declared with theatrical flair.
-			<break time="450ms"/>
-            The words came out in a wheeze. Several of the teeth were missing, giving his sibilants a soggy, whistling quality.
-			<break time="450ms"/>
-            Lyria blinked and leaned slightly away.
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="story" styledegree="2">
+	            the skull declared with theatrical flair.
+				<break time="450ms"/>
+				The words came out in a wheeze. Several of the teeth were missing, giving his sibilants a soggy, whistling quality.
+				<break time="450ms"/>
+				Lyria blinked and leaned slightly away.
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="en-US-Ava3:DragonHDLatestNeural">
-        <mstts:express-as style="default" styledegree="2">
-            “I’m sorry<break time="300ms"/> you’re what?”
-            <break time="450ms"/>
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="default" styledegree="2">
+	            “I’m sorry<break time="300ms"/> you’re what?”
+				<break time="450ms"/>
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="zh-CN-XiaoxiaoMultilingualNeural">
-        <mstts:express-as style="story" styledegree="2">
-            The skull hovered a little higher, flames flaring in irritation.
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="story" styledegree="2">
+	            The skull hovered a little higher, flames flaring in irritation.
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="en-US-Adam:DragonHDLatestNeural">
-        <mstts:express-as style="default" styledegree="2">
-            “A flame thkull!”
-			<break time="450ms"/>
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="default" styledegree="2">
+	            “A flame thkull!”
+				<break time="450ms"/>
+        	</mstts:express-as>
+		</lang>
     </voice>
 	<voice name="en-US-Ava3:DragonHDLatestNeural">
-        <mstts:express-as style="default" styledegree="2">
-            “A what?” 
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="default" styledegree="2">
+	            “A what?” 
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="zh-CN-XiaoxiaoMultilingualNeural">
-        <mstts:express-as style="story" styledegree="2">
-            Lyria asked again, squinting.
-			<break time="450ms"/>
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="story" styledegree="2">
+	            Lyria asked again, squinting.
+				<break time="450ms"/>
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="en-US-Adam:DragonHDLatestNeural">
-        <mstts:express-as style="shouting" styledegree="2">
-            “A FLAME THKULL!!!”
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="shouting" styledegree="2">
+	            “A FLAME THKULL!!!”
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="zh-CN-XiaoxiaoMultilingualNeural">
-        <mstts:express-as style="story" styledegree="2">
-            the skull repeated, louder and slightly offended.
-			<break time="450ms"/>
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="story" styledegree="2">
+	            the skull repeated, louder and slightly offended.
+				<break time="450ms"/>
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="en-US-Ava3:DragonHDLatestNeural">
-        <mstts:express-as style="default" styledegree="2">
-            “Ah. A flame skull,”
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="default" styledegree="2">
+	            “Ah. A flame skull,”
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="zh-CN-XiaoxiaoMultilingualNeural">
-        <mstts:express-as style="story" styledegree="2">
-            Lyria said finally, eyebrows raised.
-			<break time="450ms"/>
-            Barnabas bobbed proudly, apparently satisfied. A spectral hand shimmered into existence beside him and reached for the nearest teacup. It lifted the steaming vessel daintily and brought it to where the skull’s mouth might once have been.
-			<break time="450ms"/>
-            The tea immediately hissed into vapor against the green fire. Barnabas sighed theatrically, the flames flickering brighter around his temples.
-			<break time="450ms"/>
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="story" styledegree="2">
+	            Lyria said finally, eyebrows raised.
+				<break time="450ms"/>
+				Barnabas bobbed proudly, apparently satisfied. A spectral hand shimmered into existence beside him and reached for the nearest teacup. It lifted the steaming vessel daintily and brought it to where the skull’s mouth might once have been.
+				<break time="450ms"/>
+				The tea immediately hissed into vapor against the green fire. Barnabas sighed theatrically, the flames flickering brighter around his temples.
+				<break time="450ms"/>
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="en-US-Adam:DragonHDLatestNeural">
-        <mstts:express-as style="default" styledegree="2">
-            “Delightful,”
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="default" styledegree="2">
+	            “Delightful,”
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="zh-CN-XiaoxiaoMultilingualNeural">
-        <mstts:express-as style="story" styledegree="2">
-            he said, as if tasting a rare vintage.
-			<break time="450ms"/>
-            Lyria gave him a side-eye glance and slowly turned back to her untouched cup, uncertain whether to be amused, concerned, or both.
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="story" styledegree="2">
+	            he said, as if tasting a rare vintage.
+				<break time="450ms"/>
+				Lyria gave him a side-eye glance and slowly turned back to her untouched cup, uncertain whether to be amused, concerned, or both.
+        	</mstts:express-as>
+		</lang>
     </voice>
   ```
 - **Input:** “Well, don’t just stand there collecting dust! Come on in!” she called over her shoulder.
@@ -618,47 +758,57 @@ EXAMPLES
 - **Expected output:**
   ```xml
     <voice name="en-US-Serena:DragonHDLatestNeural">
-        <mstts:express-as style="cheerful" styledegree="2">
-            “Well, don’t just stand there collecting dust! Come on in!”
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="cheerful" styledegree="2">
+	            “Well, don’t just stand there collecting dust! Come on in!”
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="zh-CN-XiaoxiaoMultilingualNeural">
-        <mstts:express-as style="story" styledegree="2">
-            she called over her shoulder.
-			<break time="450ms"/>
-            The hulking stitched-together creature turned and lumbered after her without a word, its massive feet leaving dents in the scorched earth. Hesitantly, the party followed.
-			<break time="450ms"/>
-            The crone led them down a winding path that curved around the foot of the hand-shaped mountain. Jagged shadows danced across the rocks as the sky roared behind the oily smog clouds. At the path’s end loomed a yawning cavern, its entrance framed by bones twisted into a crude archway. Chimes made of scrap metal and devil teeth clinked in the breeze. A faint light spilled from within, accompanied by the sharp, heavy scent of herbs.
-			<break time="450ms"/>
-            Inside was a lair unlike any Lyria had ever seen. The ceiling arched low and was cluttered with bundles of dried plants and glowing fungi, hung with twine and rusted chains. Strange trinkets and relics dangled between them. The scent was overwhelming: dried rosehip, singed nettle, something smoky and vaguely sweet<break time="300ms"/> and beneath it all, the oily, metallic sting of something not meant for mortal kitchens.
-			<break time="450ms"/>
-            Furniture crafted from warped scrap metal and scavenged wood formed a jumbled but strangely cozy interior. Rugs<break time="300ms"/>some shaggy, some scaled—softened the floor beneath their boots.
-			<break time="450ms"/>
-            There was a single table in the center of it all: a flat stone, polished with age and blackened at the edges by countless burn marks and what one could guess to be dried blood.
-            <break time="450ms"/>
-            Maggie turned, eyes gleaming.
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="story" styledegree="2">
+	            she called over her shoulder.
+				<break time="450ms"/>
+				The hulking stitched-together creature turned and lumbered after her without a word, its massive feet leaving dents in the scorched earth. Hesitantly, the party followed.
+				<break time="450ms"/>
+				The crone led them down a winding path that curved around the foot of the hand-shaped mountain. Jagged shadows danced across the rocks as the sky roared behind the oily smog clouds. At the path’s end loomed a yawning cavern, its entrance framed by bones twisted into a crude archway. Chimes made of scrap metal and devil teeth clinked in the breeze. A faint light spilled from within, accompanied by the sharp, heavy scent of herbs.
+				<break time="450ms"/>
+				Inside was a lair unlike any Lyria had ever seen. The ceiling arched low and was cluttered with bundles of dried plants and glowing fungi, hung with twine and rusted chains. Strange trinkets and relics dangled between them. The scent was overwhelming: dried rosehip, singed nettle, something smoky and vaguely sweet<break time="300ms"/> and beneath it all, the oily, metallic sting of something not meant for mortal kitchens.
+				<break time="450ms"/>
+				Furniture crafted from warped scrap metal and scavenged wood formed a jumbled but strangely cozy interior. Rugs<break time="300ms"/>some shaggy, some scaled—softened the floor beneath their boots.
+				<break time="450ms"/>
+				There was a single table in the center of it all: a flat stone, polished with age and blackened at the edges by countless burn marks and what one could guess to be dried blood.
+				<break time="450ms"/>
+				Maggie turned, eyes gleaming.
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="en-US-Serena:DragonHDLatestNeural">
-        <mstts:express-as style="cheerful" styledegree="2">
-            “Sit, sit! No harm ever comes to those who share bread and salt under my roof!”
-            <break time="450ms"/>
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="cheerful" styledegree="2">
+	            “Sit, sit! No harm ever comes to those who share bread and salt under my roof!”
+				<break time="450ms"/>
+        	</mstts:express-as>
+		</lang>
     </voice>
   ```
 - **Input:** “An urgent message for you, sirs!” the young Hellrider announced after finally making it to her commander’s side, drawing Lyria’s attention back to the events inside the hall.
 - **Expected output:**
     ```
     <voice name="en-US-Aria:DragonHDLatestNeural">
-        <mstts:express-as style="default" styledegree="2">
-            “An urgent message for you, sirs!” 
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="default" styledegree="2">
+	            “An urgent message for you, sirs!” 
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="zh-CN-XiaoxiaoMultilingualNeural">
-        <mstts:express-as style="story" styledegree="2">
-            the young Hellrider announced after finally making it to her commander’s side, drawing Lyria’s attention back to the events inside the hall.
-            <break time="450ms"/>
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="story" styledegree="2">
+	            the young Hellrider announced after finally making it to her commander’s side, drawing Lyria’s attention back to the events inside the hall.
+				<break time="450ms"/>
+        	</mstts:express-as>
+		</lang>
     </voice>
     ```
 - **Input:** Nemo stretched, furniture creaking gently under him, and called lazily. “Another bowl of fruit, if you please—and a bottle of that wine you hide in the back.”
@@ -675,134 +825,178 @@ The servant inclined his head and gestured in a direction, toward something they
 - **Expected output:**
     ```
     <voice name="zh-CN-XiaoxiaoMultilingualNeural">
-        <mstts:express-as style="story" styledegree="2">
-			Nemo stretched, furniture creaking gently under him, and called lazily.
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="story" styledegree="2">
+				Nemo stretched, furniture creaking gently under him, and called lazily.
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="en-US-Andrew:DragonHDLatestNeural">
-        <mstts:express-as style="default" styledegree="2">
-            “Another bowl of fruit, if you please<break time="300ms"/>and a bottle of that wine you hide in the back.”
-			<break time="450ms"/>
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="default" styledegree="2">
+	            “Another bowl of fruit, if you please<break time="300ms"/>and a bottle of that wine you hide in the back.”
+				<break time="450ms"/>
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="zh-CN-XiaoxiaoMultilingualNeural">
-        <mstts:express-as style="story" styledegree="2">
-            The servant hesitated, eyes flicking downward before he murmured.
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="story" styledegree="2">
+	            The servant hesitated, eyes flicking downward before he murmured.
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="en-GB-OllieMultilingualNeural">
-        <mstts:express-as style="default" styledegree="2">
-            “Ah, honored guest<break time="300ms"/> I fear the master’s generosity has already been spent. The feast you enjoyed was his gift. All further comforts<break time="300ms"/> come at a cost.”
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="default" styledegree="2">
+	            “Ah, honored guest<break time="300ms"/> I fear the master’s generosity has already been spent. The feast you enjoyed was his gift. All further comforts<break time="300ms"/> come at a cost.”
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="zh-CN-XiaoxiaoMultilingualNeural">
-        <mstts:express-as style="story" styledegree="2">
-            His voice had softened toward the end, but not enough to dull the edge.
-			<break time="450ms"/>
-			Nemo leaned forward, suspicion narrowing his gaze. 
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="story" styledegree="2">
+	            His voice had softened toward the end, but not enough to dull the edge.
+				<break time="450ms"/>
+				Nemo leaned forward, suspicion narrowing his gaze. 
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="en-US-Andrew:DragonHDLatestNeural">
-        <mstts:express-as style="default" styledegree="2">
-            “What kind of a cost?”
-			<break time="450ms"/>
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="default" styledegree="2">
+	            “What kind of a cost?”
+				<break time="450ms"/>
+        	</mstts:express-as>
+		</lang>
     </voice>
 	<voice name="zh-CN-XiaoxiaoMultilingualNeural">
-        <mstts:express-as style="story" styledegree="2">
-            The servant bowed. 
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="story" styledegree="2">
+	            The servant bowed. 
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="en-GB-OllieMultilingualNeural">
-        <mstts:express-as style="default" styledegree="2">
-            “From this moment forward, every bite, every drop, every indulgence shall be purchased with a soul coin.”
-            <break time="450ms"/>
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="default" styledegree="2">
+	            “From this moment forward, every bite, every drop, every indulgence shall be purchased with a soul coin.”
+				<break time="450ms"/>
+        	</mstts:express-as>
+		</lang>
     </voice>
 	<voice name="zh-CN-XiaoxiaoMultilingualNeural">
-        <mstts:express-as style="story" styledegree="2">
-            Pepper choked on the last sip of her drink.
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="story" styledegree="2">
+	            Pepper choked on the last sip of her drink.
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="en-US-SaraNeural">
-        <mstts:express-as style="default" styledegree="2">
-            <prosody pitch="30%">
-                “A soul coin? For another plate of eggs?”
-				<break time="450ms"/>
-            </prosody>
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="default" styledegree="2">
+	            <prosody pitch="30%">
+					“A soul coin? For another plate of eggs?”
+					<break time="450ms"/>
+				</prosody>
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="zh-CN-XiaoxiaoMultilingualNeural">
-        <mstts:express-as style="story" styledegree="2">
-            The servant’s smile was polite, practiced, unyielding. 
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="story" styledegree="2">
+	            The servant’s smile was polite, practiced, unyielding. 
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="en-GB-OllieMultilingualNeural">
-        <mstts:express-as style="default" styledegree="2">
-            “Such is the custom. Comforts, after all, are rarely free in Avernus.”
-			<break time="450ms"/>
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="default" styledegree="2">
+	            “Such is the custom. Comforts, after all, are rarely free in Avernus.”
+				<break time="450ms"/>
+        	</mstts:express-as>
+		</lang>
     </voice>
 	<voice name="zh-CN-XiaoxiaoMultilingualNeural">
-        <mstts:express-as style="story" styledegree="2">
-            Nimble let out a bitter laugh, pushing his chair back.
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="story" styledegree="2">
+	            Nimble let out a bitter laugh, pushing his chair back.
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="en-US-Steffan:DragonHDLatestNeural">
-        <mstts:express-as style="default" styledegree="2">
-            “And here I almost believed generosity could survive in Hell.”
-			<break time="450ms"/>
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="default" styledegree="2">
+	            “And here I almost believed generosity could survive in Hell.”
+				<break time="450ms"/>
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="zh-CN-XiaoxiaoMultilingualNeural">
-        <mstts:express-as style="story" styledegree="2">
-            Lyria tilted her head, smirking despite herself. 
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="story" styledegree="2">
+	            Lyria tilted her head, smirking despite herself. 
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="en-US-Ava3:DragonHDLatestNeural">
-        <mstts:express-as style="default" styledegree="2">
-            “No, only commerce.”
-			<break time="450ms"/>
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="default" styledegree="2">
+	            “No, only commerce.”
+				<break time="450ms"/>
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="zh-CN-XiaoxiaoMultilingualNeural">
-        <mstts:express-as style="story" styledegree="2">
-            The companions exchanged looks. None of them were eager to spend such currency lightly.
-            <break time="450ms"/>
-            It was Nimble who finally broke the silence, his voice quiet but edged with purpose.
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="story" styledegree="2">
+	            The companions exchanged looks. None of them were eager to spend such currency lightly.
+				<break time="450ms"/>
+				It was Nimble who finally broke the silence, his voice quiet but edged with purpose.
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="en-US-Steffan:DragonHDLatestNeural">
-        <mstts:express-as style="default" styledegree="2">
-            “Is there anywhere in the bazaar that takes material plane coin?”
-			<break time="450ms"/>
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="default" styledegree="2">
+	            “Is there anywhere in the bazaar that takes material plane coin?”
+				<break time="450ms"/>
+        	</mstts:express-as>
+		</lang>
     </voice>
 	<voice name="zh-CN-XiaoxiaoMultilingualNeural">
-        <mstts:express-as style="story" styledegree="2">
-            The servant inclined his head and gestured in a direction, toward something they could not see through the fabrics. 
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="story" styledegree="2">
+	            The servant inclined his head and gestured in a direction, toward something they could not see through the fabrics. 
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="en-GB-OllieMultilingualNeural">
-        <mstts:express-as style="default" styledegree="2">
-            “You’ll find what you seek at Firesnake Forge. It stands beside the bazaar’s entrance<break time="300ms"/>a workshop dealing in mortal goods, for mortal currency.”
-            <break time="450ms"/>
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="default" styledegree="2">
+	            “You’ll find what you seek at Firesnake Forge. It stands beside the bazaar’s entrance<break time="300ms"/>a workshop dealing in mortal goods, for mortal currency.”
+				<break time="450ms"/>
+        	</mstts:express-as>
+		</lang>
     </voice>
     ```
 - **Input:** Nemo narrowed his eyes, voice low. “We should approach with care.”
 - **Expected output:**
     ```
     <voice name="zh-CN-XiaoxiaoMultilingualNeural">
-        <mstts:express-as style="story" styledegree="2">
-			Nemo narrowed his eyes, voice low.
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="story" styledegree="2">
+				Nemo narrowed his eyes, voice low.
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="en-US-Andrew:DragonHDLatestNeural">
-        <mstts:express-as style="default" styledegree="2">
-            “We should approach with care.”
-			<break time="450ms"/>
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="default" styledegree="2">
+	            “We should approach with care.”
+				<break time="450ms"/>
+        	</mstts:express-as>
+		</lang>
     </voice>
     ```
 - **Input:** One devil, lean and scarred, inclined his head. “Mordenkainen always hungers for infernal goods. Bring him what he craves, and he pays well.”
@@ -813,74 +1007,96 @@ The devils exchanged shrugs and low chuckles. “We care only for our bargains,�
 - **Expected output:**
     ```
     <voice name="zh-CN-XiaoxiaoMultilingualNeural">
-        <mstts:express-as style="story" styledegree="2">
-            One devil, lean and scarred, inclined his head.
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="story" styledegree="2">
+	            One devil, lean and scarred, inclined his head.
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="en-US-JasonNeural">
-        <mstts:express-as style="default" styledegree="2">
-			<prosody pitch="-25%">
-				“Mordenkainen always hungers for infernal goods. Bring him what he craves, and he pays well.”
-				<break time="450ms"/>
-			</prosody>
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="default" styledegree="2">
+				<prosody pitch="-25%">
+					“Mordenkainen always hungers for infernal goods. Bring him what he craves, and he pays well.”
+					<break time="450ms"/>
+				</prosody>
+        	</mstts:express-as>
+		</lang>
     </voice>
 	    <voice name="zh-CN-XiaoxiaoMultilingualNeural">
-        <mstts:express-as style="story" styledegree="2">
-            Another devil continued, his voice tinged with slight irritation. 
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="story" styledegree="2">
+	            Another devil continued, his voice tinged with slight irritation. 
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="en-US-JasonNeural">
-        <mstts:express-as style="irritation" styledegree="2">
-			<prosody pitch="-25%">
-				“We wait for him to appear upon the balcony. Hopefully, his needs are great tonight<break time="300ms"/>there are many present who wish to fulfill his desires.”
-				<break time="450ms"/>
-			</prosody>
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="irritation" styledegree="2">
+				<prosody pitch="-25%">
+					“We wait for him to appear upon the balcony. Hopefully, his needs are great tonight<break time="300ms"/>there are many present who wish to fulfill his desires.”
+					<break time="450ms"/>
+				</prosody>
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="en-US-JasonNeural">
-        <mstts:express-as style="default" styledegree="2">
-			<prosody pitch="-25%">
-				“And do not think to quarrel here. The mage hates disorder. If blades are drawn, he’ll release a storm from above, banishing us from this place,”
-			</prosody>
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="default" styledegree="2">
+				<prosody pitch="-25%">
+					“And do not think to quarrel here. The mage hates disorder. If blades are drawn, he’ll release a storm from above, banishing us from this place,”
+				</prosody>
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="zh-CN-XiaoxiaoMultilingualNeural">
-        <mstts:express-as style="story" styledegree="2">
-            the first added, with a glance toward the tower’s blazing crown.
-            <break time="450ms"/>
-			Lyria’s eyes narrowed, her tone casual as she pressed further.
-        </mstts:express-as>
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="story" styledegree="2">
+	            the first added, with a glance toward the tower’s blazing crown.
+				<break time="450ms"/>
+				Lyria’s eyes narrowed, her tone casual as she pressed further.
+        	</mstts:express-as>
+		</lang>
     </voice>
     <voice name="en-US-Ava3:DragonHDLatestNeural">
-        <mstts:express-as style="default" styledegree="2">
-            “And if mortals or even celestials would join you to answer to his whims? Would that matter to you?”
-			<break time="450ms"/>
-        </mstts:express-as>
-    </voice>
-    <voice name="zh-CN-XiaoxiaoMultilingualNeural">
-        <mstts:express-as style="story" styledegree="2">
-            The devils exchanged shrugs and low chuckles. 
-        </mstts:express-as>
-    </voice>
-    <voice name="en-US-JasonNeural">
-        <mstts:express-as style="default" styledegree="2">
-			<prosody pitch="-25%">
-				“We care only for our bargains,”
-			</prosody>
-        </mstts:express-as>
-    </voice>
-    <voice name="zh-CN-XiaoxiaoMultilingualNeural">
-        <mstts:express-as style="story" styledegree="2">
-            one replied.
-        </mstts:express-as>
-    </voice>
-    <voice name="en-US-JasonNeural">
-        <mstts:express-as style="default" styledegree="2">
-			<prosody pitch="-25%">
-				“Mortals, angels, fiends<break time="300ms"/>none of that matters. Only the mage’s will.”
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="default" styledegree="2">
+	            “And if mortals or even celestials would join you to answer to his whims? Would that matter to you?”
 				<break time="450ms"/>
-			</prosody>
-        </mstts:express-as>
+        	</mstts:express-as>
+		</lang>
+    </voice>
+    <voice name="zh-CN-XiaoxiaoMultilingualNeural">
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="story" styledegree="2">
+	            The devils exchanged shrugs and low chuckles. 
+        	</mstts:express-as>
+		</lang>
+    </voice>
+    <voice name="en-US-JasonNeural">
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="default" styledegree="2">
+				<prosody pitch="-25%">
+					“We care only for our bargains,”
+				</prosody>
+        	</mstts:express-as>
+		</lang>
+    </voice>
+    <voice name="zh-CN-XiaoxiaoMultilingualNeural">
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="story" styledegree="2">
+	            one replied.
+        	</mstts:express-as>
+		</lang>
+    </voice>
+    <voice name="en-US-JasonNeural">
+        <lang xml:lang="en-GB">
+			<mstts:express-as style="default" styledegree="2">
+				<prosody pitch="-25%">
+					“Mortals, angels, fiends<break time="300ms"/>none of that matters. Only the mage’s will.”
+					<break time="450ms"/>
+				</prosody>
+        	</mstts:express-as>
+		</lang>
     </voice>
     ```
