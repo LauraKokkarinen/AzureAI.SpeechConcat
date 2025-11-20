@@ -89,7 +89,6 @@
    - Phoneme Replacement:
       - Replace every occurrence of "Jynks" with ```<phoneme alphabet="ipa" ph="ʒinks">Jynks</phoneme>```.
       - Replace every occurrence of "wyrm" with ```<phoneme alphabet="ipa" ph="wɜːm">wyrm</phoneme>```.
-      - Replace every occurrence of "Sssh" with ```<phoneme alphabet="ipa" ph="ʃʃʃʃ">Sssh</phoneme>```.
 
 6. Structure and Syntax
    - Root Element: 
