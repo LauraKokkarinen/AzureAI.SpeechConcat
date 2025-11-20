@@ -30,7 +30,7 @@
          - Tiefling girl: en-US-Bree:DragonHDLatestNeural
          - Nemo: en-US-Andrew:DragonHDLatestNeural
          - Pepper Whiskershadow: en-US-SaraNeural (apply a prosody pitch of 30%)
-         - Nimble Thunder: en-US-Steffan:DragonHDLatestNeural         
+         - Nimble Thunder: en-US-Steffan:DragonHDLatestNeural
          - Seltern: en-US-GuyNeural (apply a prosody pitch of -10%)
          - Zevlor: en-US-Andrew3:DragonHDLatestNeural
          - Pherria Jynks: en-US-Emma2:DragonHDLatestNeural
@@ -66,6 +66,8 @@
          - Voice within the map: en-US-Adam:DragonHDLatestNeural
          - Mordenkainen: en-US-OnyxTurboMultilingualNeural
          - Eliza (erinyes): en-US-Phoebe:DragonHDLatestNeural
+         - Dragon: en-US-NancyMultilingualNeural (apply prosody pitch of -15%)
+         - Torogar Steelfist: en-US-DavisMultilingualNeural (apply prosody pitch of -15%)
    - IMPORTANT: DO NOT generate any dialogue or character-specific SSML blocks if the input text does not contain exact quotation marks.
 
 4. Dialogue Customization and Emotion Handling
@@ -86,6 +88,8 @@
       - Replace any occurrence of three consecutive dots (...) and ellipsis (…) with ```<break time="300ms"/>``` (inside the ```<mstts:express-as>``` element).
    - Phoneme Replacement:
       - Replace every occurrence of "Jynks" with ```<phoneme alphabet="ipa" ph="ʒinks">Jynks</phoneme>```.
+      - Replace every occurrence of "wyrm" with ```<phoneme alphabet="ipa" ph="wɜːm">wyrm</phoneme>```.
+      - Replace every occurrence of "Sssh" with ```<phoneme alphabet="ipa" ph="ʃʃʃʃ">Sssh</phoneme>```.
 
 6. Structure and Syntax
    - Root Element: 
