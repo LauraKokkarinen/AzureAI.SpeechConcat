@@ -26,17 +26,18 @@ You can select which speech synthesis method you wish to use via the `appsetting
 1. Add the following keys to the `appsettings.json` file and populate them with your values.
    ```json
    {
-        "OpenAIEndpoint": "https://your-resource-name.openai.azure.com/", // Get this from Azure AI Foundry
-        "OpenAIKey": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVQWXYZ", // Get this from Azure AI Foundry
-        "OpenAIDeployment": "gpt-4o",
-        "SystemMessageFilePath": "C:\\directory\\systemmessage.txt",
-        "SpeechRegion": "swedencentral", // Get this from the Speech service Overview blade
-        "SpeechKey":  "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVQWXYZ", // Get this from Azure AI Foundry
-        "InputTextFilePath": "C:\\directory\\input.txt", // File containing the plain-text you wish to synthesize
-        "OutputAudioFileName": "Output file name without extension", // Created in the same directory with the text file
-        "SaveSsml": true, // Save the SSML files for debugging purposes,
-        "UseExistingSsml": true, // Instead of generating new SSML files, use the existing ones
-        "UseBatchSynthesis": false // true = use the Batch synthesis API (async), false = use SpeechSynthesizer (real-time)
+     "OpenAIEndpoint": "https://your-resource-name.openai.azure.com/", // Get this from Azure AI Foundry.
+     "OpenAIKey": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVQWXYZ", // Get this from Azure AI Foundry.
+     "OpenAIDeployment": "gpt-4.1",
+     "SystemMessageFilePath": "C:\\directory\\systemmessage.txt",
+     "SpeechRegion": "swedencentral", // Get this from the Speech service Overview blade.
+     "SpeechKey": "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVQWXYZ", // Get this from Azure AI Foundry.
+     "InputTextFilePath": "C:\\directory\\input.txt", // File containing the plain-text you wish to synthesize.
+     "OutputAudioFileName": "Output file name without extension", // Created in the same directory with the text file.
+     "SaveSsml": true, // Save the SSML files for debugging purposes.
+     "CombineSsml":  true, // Combine all SSML files into a single SSML file before sending it to the speech service.
+     "UseExistingSsml": true, // Instead of generating new SSML files, use the existing ones if such exist. If none exists, generates the files as per usual.
+     "UseBatchSynthesis": false // true = use the Batch synthesis API (async), false = use SpeechSynthesizer (real-time)
    }
    ```
 1. Run the console application.
