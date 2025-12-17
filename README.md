@@ -19,7 +19,7 @@ You can select which speech synthesis method you wish to use via the `appsetting
 ## Running the application
 
 1. Create an Azure AI Founry resource on your Azure subscription.
-1. Deploy a `gpt-4o` Azure Open AI model.
+1. Deploy a `gpt-4.1` Azure Open AI model.
 1. Create a custom content filter for the Azure Open AI model with high thresholds (optional, depends on content).
 1. Clone this repository onto your computer and open the solution on Visual Studio.
 1. Create an `appsettings.json` file in the project root. The file is not automatically present because it has been added to `.gitignore` to prevent the contents from being accidentally checked into version control.
